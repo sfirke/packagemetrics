@@ -9,12 +9,23 @@
 #' @export
 #' @examples
 #'
-#'scrape_github_package_page("https://github.com/tidyverse/dplyr")
+#'scrape_github_package_page("dplyr")
+#'# don't run:
+#'# tables[1:5] %>% purrr::map_df(scrape_github_package_page)
 
 
-scrape_github_package_page <- function(repo_url){
+scrape_github_package_page <- function(package_name){
+  gh_info <- getGitHub(package_name)
+  if(!gh_info$onGitHub){
+    return(data.frame(package = package_name,
+                      ci = "Not on GitHub",
+                      test_coverage = "Not on GitHub",
+                      stringsAsFactors = FALSE
+                      )
+          )
+  }
+  repo_url <- gh_info$GitHub
 
-  package_name <- sub('.*\\/', '', repo_url)
   image_info <- repo_url %>%
     xml2::read_html() %>%
     rvest::html_nodes("p img") %>%
@@ -22,10 +33,11 @@ scrape_github_package_page <- function(repo_url){
     purrr::map_df(~as.list(.))
 
   if(! "data-canonical-src" %in% names(image_info)){
-    return(
-      data.frame(ci = "NONE",
-                 test_coverage = FALSE
-      )
+    return(data.frame(package = package_name,
+                      ci = "NONE",
+                      test_coverage = "NONE",
+                      stringsAsFactors = FALSE
+    )
     )
   }
 
@@ -41,7 +53,8 @@ scrape_github_package_page <- function(repo_url){
 
   data.frame(package = package_name,
              ci = ci,
-             test_coverage = codecov
+             test_coverage = ifelse(is.na(codecov), "NONE", "CodeCov"),
+             stringsAsFactors = FALSE
   )
 
 }
