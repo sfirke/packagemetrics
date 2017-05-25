@@ -1,6 +1,4 @@
-library(datapasta)
-
-tables <- c("Arsenal", "ascii", "condformat", "Desctable",
+tables <- c("arsenal", "ascii", "condformat", "desctable",
   "DT", "expss", "ezsummary", "formattable",
   "gmodels", "Gtable",
   "Hmisc", "htmlTable", "huxtable", "janitor", "kable",
