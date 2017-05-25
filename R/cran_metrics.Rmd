@@ -5,32 +5,42 @@ output: html_notebook
 
 ```{r}
 library(tidyverse)
-
-cran <- tools::CRAN_package_db()
+library(janitor)
 ```
 
-
-
 ```{r}
+cran <- tools::CRAN_package_db()
+
 # the returned data frame has two columns with the same name???
 cran <- cran[,-65]
 
 # make it a tibble
 cran <- tbl_df(cran)
 
+```
+
+
+
+```{r}
 names(cran)
 ```
 
 
 ```{r}
-# cran %>%
-#   select(Package, Version, Depends, Imports, LinkingTo, 
-#          Suggests. Enhances, MD5sum, Author, BugReports,
-#          URL, VignetteBuilder, BuildVignettes) 
+tables_packages <- readRDS("../data/tables.rds")
+
+tables_packages <- tbl_df(tables_packages)
 ```
 
 
 ```{r}
-table_packages <- c("Arsenal", "ascii", "condformat", "Desctable", "DT", "expss", "ezsummary", "formattable", "gmodels::CrossTable()", "Gtable", "tableGrob", "Hmisc", "htmlTable", "huxtable", "janitor", "kable", "kableExtra", "pander", "pixiedust", "ReporteRs", "stargazer", "Tableone", "tables", "tangram", "texreg", "xtable", "Ztable", "Tabular")
+cran %>% 
+  filter(Package %in% tables_packages$value) %>%
+  clean_names() %>% 
+```
+
+
+```{r}
+
 ```
 
