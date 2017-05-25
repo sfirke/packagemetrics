@@ -1,6 +1,3 @@
-<<<<<<< 6369b94d6628bda06539aacfa35be067ecdfd749
-# packagemetrics
-=======
 # packagemetrics
 
 This repo is for a package to obtain a collection of metrics on R packages which are intended to inform the decision which package you choose for a certain task.
@@ -32,4 +29,4 @@ Collection of ideas for metrics:
 - What % of function man pages have an example?
 - What packages are commonly co-mentioned with it:
     - Could be in its own documentation/vignette; or StackOverflow; or on GitHub scripts where it is mentioned
->>>>>>> added links to issues for #runconf17
+
