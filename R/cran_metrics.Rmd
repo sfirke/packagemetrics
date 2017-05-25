@@ -1,0 +1,36 @@
+---
+title: "Grabbing Package Data from CRAN"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+
+cran <- tools::CRAN_package_db()
+```
+
+
+
+```{r}
+# the returned data frame has two columns with the same name???
+cran <- cran[,-65]
+
+# make it a tibble
+cran <- tbl_df(cran)
+
+names(cran)
+```
+
+
+```{r}
+# cran %>%
+#   select(Package, Version, Depends, Imports, LinkingTo, 
+#          Suggests. Enhances, MD5sum, Author, BugReports,
+#          URL, VignetteBuilder, BuildVignettes) 
+```
+
+
+```{r}
+table_packages <- c("Arsenal", "ascii", "condformat", "Desctable", "DT", "expss", "ezsummary", "formattable", "gmodels::CrossTable()", "Gtable", "tableGrob", "Hmisc", "htmlTable", "huxtable", "janitor", "kable", "kableExtra", "pander", "pixiedust", "ReporteRs", "stargazer", "Tableone", "tables", "tangram", "texreg", "xtable", "Ztable", "Tabular")
+```
+
