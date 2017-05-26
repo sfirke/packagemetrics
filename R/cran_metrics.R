@@ -29,7 +29,7 @@ cran_metrics <- function(package_name) {
     has_vignette_build = ifelse(is.na(vignettebuilder), TRUE, FALSE),
     has_tests = ifelse(str_detect(suggests, "testthat|RUnit"), TRUE, FALSE),
     has_tests = ifelse(is.na(has_tests), FALSE, has_tests),
-    reverse_count = reverse_imports_count + reverse_depends_count
+    reverse_count = tidyr::replace_na(reverse_imports_count, 0) + tidyr::replace_na(reverse_depends_count, 0)
     ) %>%
   dplyr::select(-(imports:reverse_depends), -vignettebuilder, -reverse_imports_count, -reverse_depends_count) %>%
   cbind(get_cran_downloads(package_name))
