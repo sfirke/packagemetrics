@@ -1,0 +1,208 @@
+---
+title: "tableSample"
+author: "rTables-Group"
+date: "May 26, 2017"
+output:
+  html_document:
+    code_folding: hide
+    toc: yes
+    toc_float: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+***
+***
+
+## 5 Selected Tables packages with sample code
+
+As a proof of concept, below is the List of 5 Table packages we considered today:
+
+
+### 1: condformat
+
+***condformat*** prints a data frame with cells formatted according to several rules or criteria. It is integrated with the RStudio Viewer or a web browser, and it supports knitr and rmarkdown outputs using both HTML and PDF output formats.
+
+[Documentation](https://cran.r-project.org/web/packages/condformat/vignettes/introduction.html)
+
+#### Example
+
+```{r condformat, warning=FALSE, message=FALSE}
+data(iris)
+#install.packages("condformat")
+library(condformat)
+condformat(iris[c(1:5,70:75, 120:125),]) +
+  rule_fill_discrete(Species) + 
+  rule_fill_discrete(Sepal.Width, Sepal.Length,
+                     expression = Sepal.Width > Sepal.Length - 2.25,
+                     colours = c("TRUE" = "#7D00FF")) + 
+  rule_fill_gradient2(Petal.Length)
+
+```
+
+
+***
+***
+
+### 2: formattable
+
+Designed for applying formatting on vectors and data frames to make data presentation easier, richer, more flexible and hopefully convey more information. 
+
+[Documentation](https://cran.r-project.org/web/packages/formattable/vignettes/introduction.html)
+
+#### Example
+
+```{r formattable, warning=FALSE, message=FALSE}
+#install.packages("formattable")
+library(formattable)
+p <- percent(c(0.1, 0.02, 0.03, 0.12))      # display values in percent format
+p
+
+#works with arithmetic operations and other common functions and preserves its formatting.
+p + 0.05
+```
+
+***
+***
+
+
+### 3: kableExtra
+
+Designed to help build common complex tables and manipulate table style.  Comes with hoverable html tables, multi-column header and footnotes capabilities.
+
+[Documentation](https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html)
+
+#### Example
+
+```{r kableExtra, warning=FALSE, message=FALSE}
+#install.packages(knitr)
+#install.packages("kableExtra")
+library(knitr)
+library(kableExtra)
+
+dt <- mtcars[1:5, 1:6]
+
+#Basic HTML Table
+kable(dt)
+
+#HTML hoverable tables 
+kable(dt, "html") %>%
+   kable_styling(bootstrap_options = c("striped", "hover"))
+
+# Add Extra Header Rows
+dt %>%
+  kable("html") %>%
+  kable_styling("striped") %>%
+  add_header_above(c(" " = 1, "Group 1" = 2, "Group 2" = 2, "Group 3" = 2))
+
+# Add footnote
+dt %>%
+  kable("html", caption = "Demo Table[note]") %>%
+  kable_styling("striped") %>%
+  add_header_above(c(" ", "Group 1[note]" = 3, "Group 2[note]" = 3)) %>%
+  add_footnote(c("This table is from mtcars", 
+                 "Group 1 contains mpg, cyl and disp", 
+                 "Group 2 contains hp, drat and wt"), 
+               notation = "symbol")
+```
+
+***
+***
+
+### 4: tableby 
+
+Provides similar functionality as the SAS macros %table and %summary. 
+
+[Documentation](https://cran.r-project.org/web/packages/arsenal/vignettes/tableby.html)
+
+#### Example
+
+```{r arsenal, warning=FALSE, message=FALSE}
+# install.packages("arsenal")
+# install.packages("knitr")
+# install.packages("survival")
+
+require(arsenal)
+require(knitr)
+require(survival)
+data(mockstudy) ##load data
+#dim(mockstudy)  ##look at how many subjects and variables are in the dataset 
+
+#Create a table stratified by treament arm, use a formula statement to specify the variables that you want summarized. The example below uses age (a continuous variable) and sex (a factor).
+
+tab1 <- tableby(arm ~ sex + age, data=mockstudy)
+
+summary(tab1, text=TRUE)
+
+```
+
+***
+***
+
+### 5: Huxtable 
+
+A package for creating HTML and LaTeX tables. It provides similar functionality to xtable, but more, with a simpler interface.
+
+[Documentation](https://hughjonesd.github.io/huxtable/)
+
+#### Example
+
+```{r huxtable, warning=FALSE, message=FALSE}
+#install.packages("psych")
+#install.packages("dplyr")
+#install.packages("magrittr")
+#install.packages("huxtable")
+
+library(psych)
+library(dplyr)
+library(magrittr)
+library(huxtable)
+
+data(attitude)
+att_corr <- corr.test(as.matrix(attitude))
+
+as_hux(att_corr$r)                                                             %>%
+      set_background_color(where(att_corr$p < 0.05), 'yellow')                 %>%
+      set_background_color(where(att_corr$p < 0.01), 'orange')                 %>%
+      set_background_color(where(row(att_corr$p) == col(att_corr$p)), 'white') %>%
+      huxtable::add_rownames(colname = '')                                     %>%
+      huxtable::add_colnames()                                                 %>%
+      set_all_borders(1)
+
+```
+
+***
+***
+
+### Others
+
+List of tabling packages to be considered later
+
+
+(1) Arsenal
+(2) ascii
+(3) condformat
+(4) Desctable
+(5) DT
+(6) expss 
+[URL](https://gdemin.github.io/expss/)
+(7) ezsummary
+(9) gmodels::CrossTable()
+(10) Gtable with grid.draw, grid.table and tableGrob
+(11) Hmisc::latex
+(12) htmlTable
+(13) janitor
+(14) kable
+(15) pander
+(16) pixiedust
+(17) ReporteRs
+(18) stargazer
+(19) Tableone
+(20) tables
+(21) tangram 
+(22) texreg
+(23) xtable
+(24) Ztable
+(25) Tabular  
