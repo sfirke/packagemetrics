@@ -77,13 +77,12 @@ get_social_stats_from_html <- function(page_html){
 }
 
 get_last_commit <- function(page_html){
-    dateLastCommit <-
-  page_html %>%
+  dateLastCommit <- page_html %>%
     rvest::html_nodes("relative-time") %>%
     purrr::map(xml2::xml_attrs) %>%
     purrr::map_df(~as.list(.)) %>%
     dplyr::mutate(date = gsub("T.*", "", datetime)) %>%
-    dplyr::transmute(last_commit = (Sys.Date() - as.Date(date)/30))
+    dplyr::transmute(last_commit = as.integer(Sys.Date() - as.Date(date)/30))
 }
 
 get_last_issue_closed <- function(repo_url){
@@ -95,10 +94,10 @@ get_last_issue_closed <- function(repo_url){
     dplyr::mutate(last_issue_closed = gsub("\n|updated","",last_issue_closed) %>%
              trimws %>%
              as.Date(., format = "%B %d, %Y")) %>%
-    dplyr::mutate(last_issue_closed = (Sys.Date() - last_issue_closed)/30) %>%
+    dplyr::mutate(last_issue_closed = as.integer(Sys.Date() - last_issue_closed)/30) %>%
     dplyr::slice(1)
   if(nrow(result) == 0){
-    result <- tibble(last_issue_closed = (Sys.Date() - as.Date(NA))/30)
+    result <- tibble(last_issue_closed = NA_integer_)
   }
   result
 }
