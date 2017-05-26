@@ -60,9 +60,14 @@ get_pkgs_helper<- function(topic, pkgs, tag = "r", pagesize = 100, num_pages = 2
 #' @param num_pages Number of pages to extract.
 #' @param ... Passed on to \code{stack_search}.
 get_hits <- function(pkg, tag = "r", pagesize = 100, num_pages = 200, ...){
-    res <- stackr::stack_search(body = pkg, tagged = tag,  pagesize = pagesize,
-                                num_pages = num_pages, ...)
-    nrow(res)
+    res <- try(stackr::stack_search(body = pkg, tagged = tag,  pagesize = pagesize,
+                                num_pages = num_pages, ...), silent = TRUE)
+    if (inherits(res, "try-error")) {
+      res <- NA
+    } else {
+      res <- nrow(res)
+    }
+    return(res)
 }
 
 #' Get StackOverflow-related metrics for a package.
