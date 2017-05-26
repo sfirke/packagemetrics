@@ -14,7 +14,10 @@
 combine_metrics <- function(package_name) {
   c_pkg <- cran_metrics(package_name)
   git_pkg <- scrape_github_package_page(package_name)
-  dplyr::full_join(c_pkg, git_pkg, by="package")
+  so_pkg <- so_metrics(package_name)
+  res <- dplyr::full_join(c_pkg, git_pkg, by = "package")
+  res <- dplyr::full_join(res, so_pkg, by = "package")
+  return(res)
 }
 
 
