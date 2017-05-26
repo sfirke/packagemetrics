@@ -4,10 +4,12 @@
 \alias{combine_metrics}
 \title{Combines metrics on a package from CRAN and Github}
 \usage{
-combine_metrics(package_name)
+combine_metrics(package_name, includeSO = FALSE)
 }
 \arguments{
 \item{package_name}{name of CRAN package - case-sensitive.}
+
+\item{includeSO}{Logical. Include metrics from StackOverflow?}
 }
 \value{
 a tibble of package information.
