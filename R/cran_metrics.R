@@ -1,3 +1,16 @@
+#' @title Get CRAN-related metrics for a package.
+#'
+#' @description
+#' Searches CRAN database to pull information like depnedencies, reverse dependencies, etc.
+#'
+#' @param package_name name of CRAN package - case-sensitive.
+#'
+#' @return a tibble of package information.
+#' @export
+#' @examples
+#'
+#' cran_metrics("dplyr")
+
 cran_metrics <- function(package_name) {
   cran %>%
   dplyr::filter(package %in% package_name) %>%
@@ -22,11 +35,8 @@ count_packages <- function(x){
 }
 
 
-package <- 'DT'
 get_cran_downloads <- function(package_name){
   cran_dl_last_day = cranlogs::cran_downloads(packages = package_name, when = "last-day")
   cran_dl_last_week = cranlogs::cran_downloads(packages = package_name, when = "last-week")
   cran_dl_last_month = cranlogs::cran_downloads(packages = package_name, when = "last-month")
 }
-
-get_cran_downloads("DT")
