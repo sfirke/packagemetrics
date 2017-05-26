@@ -12,8 +12,8 @@ refresh_cran_database <- function(overwrite = FALSE){ # to be safe - specify TRU
 
 
   cran <- cran %>%
-    clean_names() %>%
-    remove_empty_cols()
+    janitor::clean_names() %>%
+    janitor::remove_empty_cols()
 
   devtools::use_data(cran, overwrite = overwrite)
 }
