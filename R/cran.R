@@ -1,16 +1,20 @@
-library(dplyr)
-library(janitor)
+# Grabs latest CRAN data, updates the file in the package's /data directory
 
-cran <- tools::CRAN_package_db()
+refresh_cran_database <- function(overwrite = FALSE){ # to be safe - specify TRUE to actually update the data
+  cran <- tools::CRAN_package_db()
 
-# the returned data frame has two columns with the same name???
-cran <- cran[,-65]
 
-# make it a tibble
-cran <- tbl_df(cran)
+  # remove first instance of column name MD5Sum
+  cran <- cran[, -dplyr::first(which(names(cran) == "MD5sum"))]
 
-cran <- cran %>%
-  clean_names() %>%
-  remove_empty_cols()
+  # make it a tibble
+  cran <- tbl_df(cran)
 
-saveRDS(cran, "data/cran.rds")
+
+  cran <- cran %>%
+    janitor::clean_names() %>%
+    janitor::remove_empty_cols()
+
+  devtools::use_data(cran, overwrite = overwrite) # for interactive use
+  devtools::use_data(cran, internal = TRUE) # for internal functions
+}

@@ -19,5 +19,5 @@ Looks at metadata of the badge graphic URLs to determine if a package uses conti
 
 scrape_github_package_page("dplyr")
 # don't run:
-# tables[1:5] \%>\% purrr::map_df(scrape_github_package_page)
+# table_packages[1:5] \%>\% purrr::map_df(scrape_github_package_page)
 }

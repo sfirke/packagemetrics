@@ -1,12 +1,43 @@
+#' @title Get GitHub URLs for a set of package names (if they exist).
+#'
+#' @description
+#' Looks at both Package URL and BugReports URL, returns GitHub URL if present in either.
+#'
+#' @param packages character vector of CRAN package names - case-sensitive.
+#'
+#' @return a vector of URLs.
+#' @export
+#' @examples
+#'
+#' getGitHub("dplyr")
+
 getGitHub <- function(packages){
-  dd <- readRDS('data/cran.rds')
 
-  out <- dd[ !duplicated(names(dd)) ] %>%
-    filter(package %in% packages) %>%
-    mutate(ongithub = str_detect("github.com", bugreports),
-           github = ifelse(is.na(bugreports), NA, stringr::str_replace(bugreports,'/issues',''))) %>%
-    select(package, github, ongithub)
+  cran_urls <- cran %>%
+    dplyr::filter(package %in% packages) %>%
+    dplyr::select(package, url, bugreports)
 
-  return(out)
+
+  url <- cran_urls$url[2] #temp
+  find_github <- function(url){
+    url <- gsub("\n", ",", url)
+    url <- gsub(" ", "", url)
+    url <- gsub("https", "http", url)
+    url <- gsub("http", "https", url)
+    url_list <- stringr::str_split(url, ",")[[1]]
+    github_url <- url_list[stringr::str_detect(url_list, "//github.com")]
+    github_url <- ifelse(length(github_url) == 0, NA, github_url)
+    github_url <- ifelse(stringr::str_sub(github_url, -1) == "/", stringr::str_sub(github_url, 1, -2), github_url)
+    return(github_url)
+  }
+
+
+  cran_urls %>%
+    dplyr::mutate(url_git = purrr::map_chr(url, find_github),
+           bug_git = purrr::map_chr(bugreports, find_github) %>% stringr::str_replace("/issues",""),
+           github_url = ifelse(is.na(url_git), bug_git, url_git)
+    ) %>%
+    dplyr::select(package, github_url) %>%
+    dplyr::mutate(ongithub = !is.na(github_url))
+
 }
-
