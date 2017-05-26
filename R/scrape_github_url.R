@@ -56,7 +56,8 @@ scrape_github_package_page <- function(package_name){
   ) %>%
     dplyr::bind_cols(get_social_stats_from_html(page_html),
               get_last_commit(page_html),
-              get_last_issue_closed(repo_url))
+              get_last_issue_closed(repo_url),
+              get_num_contributors(page_html))
 
 }
 
@@ -98,4 +99,12 @@ get_last_issue_closed <- function(repo_url){
     result <- tibble(last_issue_closed = as.Date(NA))
   }
   result
+}
+
+get_num_contributors <- function(page_html){
+  page_html %>%
+    rvest::html_nodes(".numbers-summary a") %>%
+    rvest::html_text() %>% str_match_all(" [0-9]+") %>% unlist() %>%
+    dplyr::last() %>% as.numeric() %>%
+    data.frame(contributors=.)
 }
