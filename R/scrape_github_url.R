@@ -34,15 +34,10 @@ scrape_github_package_page <- function(package_name){
     purrr::map(xml2::xml_attrs) %>%
     purrr::map_df(~as.list(.))
 
-  if(! "data-canonical-src" %in% names(image_info)){
-    return(data.frame(package = package_name,
-                      ci = "NONE",
-                      test_coverage = "NONE",
-                      stringsAsFactors = FALSE
-    )
-    )
-  }
-
+  if(! "data-canonical-src" %in% names(image_info)){ # if no images, don't try to crawl badges
+    ci <- "NONE"
+    codecov <- NA
+  } else {
   travis <- sum(stringr::str_detect(image_info$`data-canonical-src`, "travis-ci"), na.rm = TRUE) >0
   appveyor <- sum(stringr::str_detect(image_info$`data-canonical-src`, "appveyor"), na.rm = TRUE) > 0
   codecov <- sum(stringr::str_detect(image_info$`data-canonical-src`, "codecov"), na.rm = TRUE) > 0
@@ -52,6 +47,7 @@ scrape_github_package_page <- function(package_name){
     travis ~ "Travis",
     appveyor ~ "Appveyor"
   )
+  }
 
   data.frame(package = package_name,
              ci = ci,
@@ -89,7 +85,7 @@ get_last_commit <- function(page_html){
 }
 
 get_last_issue_closed <- function(repo_url){
-  paste0(repo_url, "/issues?q=is%3Aissue+is%3Aclosed+sort%3Aupdated-desc") %>%
+  result <- paste0(repo_url, "/issues?q=is%3Aissue+is%3Aclosed+sort%3Aupdated-desc") %>%
     xml2::read_html() %>%
     rvest::html_nodes(".opened-by+ .ml-2") %>%
     rvest::html_text() %>%
@@ -98,4 +94,8 @@ get_last_issue_closed <- function(repo_url){
              trimws %>%
              as.Date(., format = "%B %d, %Y")) %>%
     dplyr::slice(1)
+  if(nrow(result) == 0){
+    result <- tibble(last_issue_closed = as.Date(NA))
+  }
+  result
 }
