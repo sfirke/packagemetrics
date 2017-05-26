@@ -16,7 +16,7 @@
 
 scrape_github_package_page <- function(package_name){
   gh_info <- getGitHub(package_name)
-  if(!gh_info$onGitHub){
+  if(!gh_info$ongithub){
     return(data.frame(package = package_name,
                       ci = "Not on GitHub",
                       test_coverage = "Not on GitHub",
@@ -24,7 +24,7 @@ scrape_github_package_page <- function(package_name){
                       )
           )
   }
-  repo_url <- gh_info$GitHub
+  repo_url <- gh_info$github_url
 
   page_html <- repo_url %>%
     xml2::read_html()
@@ -59,7 +59,8 @@ scrape_github_package_page <- function(package_name){
              stringsAsFactors = FALSE
   ) %>%
     bind_cols(get_social_stats_from_html(page_html),
-              get_last_commit(page_html))
+              get_last_commit(page_html),
+              get_last_issue_closed(repo_url))
 
 }
 
@@ -84,4 +85,16 @@ get_last_commit <- function(page_html){
     purrr::map_df(~as.list(.)) %>%
     dplyr::mutate(date = gsub("T.*", "", datetime)) %>%
     dplyr::transmute(last_commit = as.Date(date))
+}
+
+get_last_issue_closed <- function(repo_url){
+  paste0(repo_url, "/issues?q=is%3Aissue+is%3Aclosed+sort%3Aupdated-desc") %>%
+    xml2::read_html() %>%
+    rvest::html_nodes(".opened-by+ .ml-2") %>%
+    rvest::html_text() %>%
+    data.frame(last_issue_closed=.) %>%
+    mutate(last_issue_closed = gsub("\n|updated","",last_issue_closed) %>%
+             trimws %>%
+             as.Date(., format = "%B %d, %Y")) %>%
+    slice(1)
 }
