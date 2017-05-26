@@ -76,12 +76,13 @@ get_social_stats_from_html <- function(page_html){
 }
 
 get_last_commit <- function(page_html){
+    dateLastCommit <- 
   page_html %>%
     rvest::html_nodes("relative-time") %>%
     purrr::map(xml2::xml_attrs) %>%
     purrr::map_df(~as.list(.)) %>%
     dplyr::mutate(date = gsub("T.*", "", datetime)) %>%
-    dplyr::transmute(last_commit = as.Date(date))
+    dplyr::transmute(last_commit = Sys.Date() - as.Date(date))
 }
 
 get_last_issue_closed <- function(repo_url){
