@@ -1,11 +1,11 @@
-devtools::install_github("lshep/stackr")
-library(stackr) ## -> DESCRIPTION
-library(tidytext)
+# devtools::install_github("lshep/stackr")
+# library(stackr) ## -> DESCRIPTION
+# library(tidytext)
 
 
 #' Get a list of CRAN packages associated with a topic
 #'
-#' @param topic What are you trying to do?
+#' @param topics What are you trying to do?
 #' @param tag StackOverflow tag.
 #' @param pagesize Size of each page to extract (max 100).
 #' @param num_pages Number of pages to extract.
@@ -63,4 +63,16 @@ get_hits <- function(pkg, tag = "r", pagesize = 100, num_pages = 200, ...){
     res <- stackr::stack_search(body = pkg, tagged = tag,  pagesize = pagesize,
                                 num_pages = num_pages, ...)
     nrow(res)
+}
+
+#' Get StackOverflow-related metrics for a package.
+#'
+#' @param package_name name of package - case sensitive.
+#' @return A data.frame of package information.
+#' @export
+#' @examples
+#' so_metrics("dplyr")
+so_metrics <- function(package_name){
+  tibble::tibble(package = package_name,
+         sohits = get_hits(pkg = package_name))
 }
