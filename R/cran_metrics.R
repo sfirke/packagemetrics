@@ -22,11 +22,3 @@ count_packages <- function(x){
 }
 
 
-package <- 'DT'
-get_cran_downloads <- function(package_name){
-  cran_dl_last_day = cranlogs::cran_downloads(packages = package_name, when = "last-day")
-  cran_dl_last_week = cranlogs::cran_downloads(packages = package_name, when = "last-week")
-  cran_dl_last_month = cranlogs::cran_downloads(packages = package_name, when = "last-month")
-}
-
-get_cran_downloads("DT")
