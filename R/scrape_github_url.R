@@ -31,7 +31,7 @@ scrape_github_package_page <- function(package_name){
 
   image_info <- page_html %>%
     rvest::html_nodes("p img") %>%
-    purrr::map(xml_attrs) %>%
+    purrr::map(xml2::xml_attrs) %>%
     purrr::map_df(~as.list(.))
 
   if(! "data-canonical-src" %in% names(image_info)){
@@ -43,10 +43,10 @@ scrape_github_package_page <- function(package_name){
     )
   }
 
-  travis <- sum(str_detect(image_info$`data-canonical-src`, "travis-ci"), na.rm = TRUE) >0
-  appveyor <- sum(str_detect(image_info$`data-canonical-src`, "appveyor"), na.rm = TRUE) > 0
-  codecov <- sum(str_detect(image_info$`data-canonical-src`, "codecov"), na.rm = TRUE) > 0
-  ci <- case_when(
+  travis <- sum(stringr::str_detect(image_info$`data-canonical-src`, "travis-ci"), na.rm = TRUE) >0
+  appveyor <- sum(stringr::str_detect(image_info$`data-canonical-src`, "appveyor"), na.rm = TRUE) > 0
+  codecov <- sum(stringr::str_detect(image_info$`data-canonical-src`, "codecov"), na.rm = TRUE) > 0
+  ci <- dplyr::case_when(
     !travis & !appveyor ~ "NONE",
     travis & appveyor ~ "Travis, Appveyor",
     travis ~ "Travis",
@@ -58,7 +58,7 @@ scrape_github_package_page <- function(package_name){
              test_coverage = ifelse(is.na(codecov), "NONE", "CodeCov"),
              stringsAsFactors = FALSE
   ) %>%
-    bind_cols(get_social_stats_from_html(page_html),
+    dplyr::bind_cols(get_social_stats_from_html(page_html),
               get_last_commit(page_html),
               get_last_issue_closed(repo_url))
 
@@ -68,7 +68,7 @@ scrape_github_package_page <- function(package_name){
 get_social_stats_from_html <- function(page_html){
   page_html %>%
     rvest::html_nodes(".social-count") %>%
-    purrr::map(xml_attrs) %>%
+    purrr::map(xml2::xml_attrs) %>%
     purrr::map_df(~as.list(.)) %>%
     dplyr::select(`aria-label`) %>%
     dplyr::mutate(github_social = stringr::str_extract(`aria-label`, "[[:digit:]]+"),
@@ -81,7 +81,7 @@ get_social_stats_from_html <- function(page_html){
 get_last_commit <- function(page_html){
   page_html %>%
     rvest::html_nodes("relative-time") %>%
-    purrr::map(xml_attrs) %>%
+    purrr::map(xml2::xml_attrs) %>%
     purrr::map_df(~as.list(.)) %>%
     dplyr::mutate(date = gsub("T.*", "", datetime)) %>%
     dplyr::transmute(last_commit = as.Date(date))
@@ -93,8 +93,8 @@ get_last_issue_closed <- function(repo_url){
     rvest::html_nodes(".opened-by+ .ml-2") %>%
     rvest::html_text() %>%
     data.frame(last_issue_closed=.) %>%
-    mutate(last_issue_closed = gsub("\n|updated","",last_issue_closed) %>%
+    dplyr::mutate(last_issue_closed = gsub("\n|updated","",last_issue_closed) %>%
              trimws %>%
              as.Date(., format = "%B %d, %Y")) %>%
-    slice(1)
+    dplyr::slice(1)
 }
