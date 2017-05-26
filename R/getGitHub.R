@@ -1,14 +1,12 @@
-library(dplyr)
+getGitHub <- function(packages){
+  dd <- readRDS('data/cran.rds')
 
-getGitHub <- function(package){
-  dd <- tools::CRAN_package_db()
   out <- dd[ !duplicated(names(dd)) ] %>%
-    filter(Package %in% package) %>%
-    mutate(onGitHub = I(!is.na(BugReports)),
-           GitHub = ifelse(is.na(BugReports), NA, stringr::str_replace(BugReports,'/issues',''))) %>%
-    select(Package, GitHub, onGitHub)
+    filter(package %in% packages) %>%
+    mutate(ongithub = str_detect("github.com", bugreports),
+           github = ifelse(is.na(bugreports), NA, stringr::str_replace(bugreports,'/issues',''))) %>%
+    select(package, github, ongithub)
 
   return(out)
 }
-
 
