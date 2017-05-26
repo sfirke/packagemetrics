@@ -4,7 +4,7 @@
 \alias{scrape_github_package_page}
 \title{Get package metrics from a GitHub repo URL.}
 \usage{
-scrape_github_package_page(repo_url)
+scrape_github_package_page(package_name)
 }
 \arguments{
 \item{repo_url}{character string in the format "https://github.com/username/packagename"}
@@ -17,5 +17,7 @@ Looks at metadata of the badge graphic URLs to determine if a package uses conti
 }
 \examples{
 
-scrape_github_package_page("https://github.com/tidyverse/dplyr")
+scrape_github_package_page("dplyr")
+# don't run:
+# tables[1:5] \%>\% purrr::map_df(scrape_github_package_page)
 }
