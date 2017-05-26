@@ -1,7 +1,3 @@
-count_packages <- function(x){
-  ifelse(!is.na(x), purrr::map_int(x, ~stringr::str_split(., ", ")[[1]] %>% length(.)), NA)
-}
-
 cran_metrics <- function(package_name) {
   cran %>%
   dplyr::filter(package %in% package_name) %>%
@@ -21,6 +17,16 @@ cran_metrics <- function(package_name) {
   dplyr::select(-author_new, -(imports:reverse_enhances), -vignettebuilder)
 }
 
+count_packages <- function(x){
+  ifelse(!is.na(x), purrr::map_int(x, ~stringr::str_split(., ", ")[[1]] %>% length(.)), NA)
+}
 
 
+package <- 'DT'
+get_cran_downloads <- function(package_name){
+  cran_dl_last_day = cranlogs::cran_downloads(packages = package_name, when = "last-day")
+  cran_dl_last_week = cranlogs::cran_downloads(packages = package_name, when = "last-week")
+  cran_dl_last_month = cranlogs::cran_downloads(packages = package_name, when = "last-month")
+}
 
+get_cran_downloads("DT")
