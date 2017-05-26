@@ -16,21 +16,21 @@ library(tidytext)
 #' @return A vector of packages mentioned in StackOverflow questions on the \code{topic}.
 #' @export
 #' @examples
-#' get_pkgs(topic = "table", tag = "r", pagesize = 100, numpage = 2)
+#' get_pkgs(topic = "table", tag = "r", pagesize = 100, num_pages = 2)
 get_pkgs <- function(topic, tag = "r", pagesize = 100, num_pages = 200,
-                    repos = "https://cran.rstudio.com"){
+                    repos = "https://cran.rstudio.com", ...){
 
     # get the questions from StackOverflow
     questions <- stackr::stack_search(tagged = tag, body = topic, filter = "withbody",
                                       pagesize = pagesize, num_pages = num_pages, ...)
 
     # tokenize the body text of the questions
-    body <- results[, "body", drop = FALSE]
+    body <- questions[, "body", drop = FALSE]
     tidyResults <-  tidytext::unnest_tokens_(body, output_col = "word", input_col = "body",
                                              token = "words")
 
     # get the list of packages
-    pkgs <- as.data.frame(available.packages(repos = repos))[,"Package"]
+    pkgs <- as.data.frame(available.packages(repos = repos)[,"Package"])
     names(pkgs) <- "word"
 
     # match words in question text with available packages
