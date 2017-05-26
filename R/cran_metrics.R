@@ -27,9 +27,9 @@ cran_metrics <- function(package_name) {
   dplyr::mutate(
     tidyverse_happy = ifelse(stringr::str_detect(imports, paste(tv_packages, collapse="|")), TRUE, FALSE),
     has_vignette_build = ifelse(is.na(vignettebuilder), TRUE, FALSE),
-    has_tests = ifelse(str_detect(suggests, "testthat|RUnit"), TRUE, FALSE),
+    has_tests = ifelse(stringr::str_detect(suggests, "testthat|RUnit"), TRUE, FALSE),
     has_tests = ifelse(is.na(has_tests), FALSE, has_tests),
-    reverse_count = reverse_imports_count + reverse_depends_count
+    reverse_count = ifelse(is.na(reverse_imports_count), 0, reverse_imports_count) + ifelse(is.na(reverse_depends_count), 0, reverse_depends_count)
     ) %>%
   dplyr::select(-(imports:reverse_depends), -vignettebuilder, -reverse_imports_count, -reverse_depends_count) %>%
   cbind(get_cran_downloads(package_name))
