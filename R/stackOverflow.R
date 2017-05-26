@@ -15,8 +15,10 @@
 #' @return A vector of packages mentioned in StackOverflow questions on the \code{topic}.
 #' @export
 #' @examples
+#' \dontrun{
 #' get_pkgs(topics = "table", tag = "r", pagesize = 100, num_pages = 2)
 #' get_pkgs(topics = c("table", "memory"), tag = "r", pagesize = 100, num_pages = 2)
+#' }
 get_pkgs <- function(topics, tag = "r", pagesize = 100, num_pages = 200, repos =
                      "https://cran.rstudio.com", ...){
 
@@ -76,7 +78,9 @@ get_hits <- function(pkg, tag = "r", pagesize = 100, num_pages = 200, ...){
 #' @return A data.frame of package information.
 #' @export
 #' @examples
+#' \dontrun{
 #' so_metrics("dplyr")
+#' }
 so_metrics <- function(package_name){
   tibble::tibble(package = package_name,
          sohits = get_hits(pkg = package_name))

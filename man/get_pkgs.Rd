@@ -27,6 +27,8 @@ A vector of packages mentioned in StackOverflow questions on the \code{topic}.
 Get a list of CRAN packages associated with a topic
 }
 \examples{
+\dontrun{
 get_pkgs(topics = "table", tag = "r", pagesize = 100, num_pages = 2)
 get_pkgs(topics = c("table", "memory"), tag = "r", pagesize = 100, num_pages = 2)
+}
 }
