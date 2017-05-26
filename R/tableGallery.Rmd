@@ -16,14 +16,47 @@ knitr::opts_chunk$set(echo = TRUE)
 ***
 ***
 
-## 5 Selected Tables packages with sample code
+## Selected Tables packages with sample code
 
 As a proof of concept, below is the List of 5 Table packages we considered today:
 
 
-### 1: condformat
+### 1: Arsenal
 
-***condformat*** prints a data frame with cells formatted according to several rules or criteria. It is integrated with the RStudio Viewer or a web browser, and it supports knitr and rmarkdown outputs using both HTML and PDF output formats.
+An Arsenal of 'R' functions for large-scale statistical summaries, which are streamlined to work within the latest reporting tools in 'R' and 'RStudio' and which use formulas and versatile summary statistics for summary tables and model.
+
+[Documentation](https://www.rdocumentation.org/packages/arsenal/versions/0.2.0)
+
+#### Example
+
+```{r arsenal, warning=FALSE, message=FALSE}
+#install.packages("arsenal")
+library(arsenal)
+library(dplyr)
+
+data(mockstudy)
+tab1 <- tableby(arm ~ sex + age, data=mockstudy)
+mylabels <- list(sex = "SEX", age ="Age, yrs")
+summary(tab1, labelTranslations = mylabels, text=TRUE)
+
+
+#freqlist() is a function to approximate the output from SAS's PROC FREQ procedure when using the /list option of the TABLE statement.
+# load mockstudy data
+data(mockstudy)
+tab.ex <- table(mockstudy[, c("arm", "sex", "mdquality.s")], useNA = "ifany")
+noby <- freqlist(tab.ex, na.options = "include")
+summary(noby)
+
+
+```
+
+
+***
+***
+
+### 2: condformat
+
+Prints a data frame with cells formatted according to several rules or criteria. It is integrated with the RStudio Viewer or a web browser, and it supports knitr and rmarkdown outputs using both HTML and PDF output formats.
 
 [Documentation](https://cran.r-project.org/web/packages/condformat/vignettes/introduction.html)
 
@@ -46,7 +79,75 @@ condformat(iris[c(1:5,70:75, 120:125),]) +
 ***
 ***
 
-### 2: formattable
+
+### 3: desctable
+
+A comprehensive descriptive and comparative tables generator for R.
+
+[Documentation](https://cran.r-project.org/web/packages/desctable/vignettes/desctable.html)
+
+#### Example
+
+```{r desctable, warning=FALSE, message=FALSE}
+#install.packages("desctable")
+library(desctable)
+
+iris %>%
+  desctable
+
+#The object produced by desctable is in fact a list of data.frames, with a "desctable" class. Methods for reduction to a simple dataframe (as.data.frame, automatically used for printing), conversion to markdown (pander
+
+mtcars %>%
+  desctable %>%
+  datatable
+```
+
+***
+***
+
+### 4: expss
+
+Provides tabulation functions with support of SPSS-style labels, multiple / nested banners, weights and multiple-response variables.
+
+[Documentation](https://cran.r-project.org/web/packages/expss/vignettes/TablesWithLabelsInR.html)
+
+#### Example
+
+```{r expss, warning=FALSE, message=FALSE}
+#install.packages("expss")
+library(expss)
+data(mtcars)
+mtcars = apply_labels(mtcars,
+                      mpg = "Miles/(US) gallon",
+                      cyl = "Number of cylinders",
+                      disp = "Displacement (cu.in.)",
+                      hp = "Gross horsepower",
+                      drat = "Rear axle ratio",
+                      wt = "Weight (1000 lbs)",
+                      qsec = "1/4 mile time",
+                      vs = "Engine",
+                      vs = c("V-engine" = 0,
+                             "Straight engine" = 1),
+                      am = "Transmission",
+                      am = c("Automatic" = 0,
+                             "Manual"=1),
+                      gear = "Number of forward gears",
+                      carb = "Number of carburetors"
+)
+
+#For quick cross-tabulation there are fre and cro family of function. For simplicity we demonstrate here only cro_cpct which caluclates column percent. Documentation for other functions, such as cro_cases for counts, cro_rpct for row percent, cro_tpct for table percent and cro_fun for custom summary functions can be seen by typing ?cro and ?cro_fun in the console.
+
+# 'cro' examples
+# multiple banners
+mtcars %>% 
+    calculate(cro_cpct(cyl, list(total(), am, vs))) %>% 
+    htmlTable(caption = "Table with multiple banners (column %).")
+```
+
+***
+***
+
+### 5: formattable
 
 Designed for applying formatting on vectors and data frames to make data presentation easier, richer, more flexible and hopefully convey more information. 
 
@@ -68,7 +169,7 @@ p + 0.05
 ***
 
 
-### 3: kableExtra
+### 6: kableExtra
 
 Designed to help build common complex tables and manipulate table style.  Comes with hoverable html tables, multi-column header and footnotes capabilities.
 
@@ -111,7 +212,7 @@ dt %>%
 ***
 ***
 
-### 4: tableby 
+### 7: tableby 
 
 Provides similar functionality as the SAS macros %table and %summary. 
 
@@ -119,7 +220,7 @@ Provides similar functionality as the SAS macros %table and %summary.
 
 #### Example
 
-```{r arsenal, warning=FALSE, message=FALSE}
+```{r tableby, warning=FALSE, message=FALSE}
 # install.packages("arsenal")
 # install.packages("knitr")
 # install.packages("survival")
@@ -141,7 +242,7 @@ summary(tab1, text=TRUE)
 ***
 ***
 
-### 5: Huxtable 
+### 8: Huxtable 
 
 A package for creating HTML and LaTeX tables. It provides similar functionality to xtable, but more, with a simpler interface.
 
@@ -176,33 +277,31 @@ as_hux(att_corr$r)                                                             %
 ***
 ***
 
-### Others
+### 9: Others
 
 List of tabling packages to be considered later
 
 
-(1) Arsenal
-(2) ascii
-(3) condformat
-(4) Desctable
-(5) DT
-(6) expss 
-[URL](https://gdemin.github.io/expss/)
-(7) ezsummary
-(9) gmodels::CrossTable()
-(10) Gtable with grid.draw, grid.table and tableGrob
-(11) Hmisc::latex
-(12) htmlTable
-(13) janitor
-(14) kable
-(15) pander
-(16) pixiedust
-(17) ReporteRs
-(18) stargazer
-(19) Tableone
-(20) tables
-(21) tangram 
-(22) texreg
-(23) xtable
-(24) Ztable
-(25) Tabular  
+(1) [ascii](https://cran.r-project.org/web/packages/ascii/index.html)
+(2) [ezsummary](https://cran.r-project.org/web/packages/ezsummary/index.html) (https://cran.r-project.org/web/packages/ezsummary/README.html)
+(3) [gmodels::CrossTable()](https://www.rdocumentation.org/packages/gmodels/versions/2.16.2/topics/CrossTable)
+(3) [Gtable with grid.draw, grid.table and tableGrob](https://cran.r-project.org/web/packages/gridExtra/vignettes/tableGrob.html)
+(4) [Hmisc::latex](https://www.rdocumentation.org/packages/Hmisc/versions/4.0-3)
+(5) [htmlTable](https://cran.r-project.org/web/packages/htmlTable/vignettes/tables.html)
+(6) [janitor](https://cran.r-project.org/web/packages/janitor/vignettes/introduction.html)
+(7) [kable](https://www.rdocumentation.org/packages/knitr/versions/1.16/topics/kable)
+(8) [pander](https://www.r-project.org/nosvn/pandoc/pander.html)
+(9) [pixiedust](https://cran.r-project.org/web/packages/pixiedust/vignettes/advancedMagic.html)
+(10) [ReporteRs](http://www.sthda.com/english/wiki/create-and-format-word-documents-using-r-software-and-reporters-package)
+(11) [stargazer](https://www.r-statistics.com/2013/01/stargazer-package-for-beautiful-latex-tables-from-r-statistical-models-output/)
+(12) [Tableone](https://cran.r-project.org/web/packages/tableone/vignettes/introduction.html)
+(13) [tables](http://www.cyclismo.org/tutorial/R/tables.html)
+(14) [Tabular](https://cran.r-project.org/web/packages/tables/vignettes/tables.pdf)
+(15) [tangram](https://github.com/spgarbet/tangram/blob/master/vignettes/example.Rmd) 
+(16) [texreg](https://diffuseprior.wordpress.com/2013/01/20/texreg-a-package-for-beautiful-and-easily-customizable-latex-regression-tables-from-r/)
+(17) [xtable](https://cran.r-project.org/web/packages/xtable/vignettes/OtherPackagesGallery.pdf)
+(18) [Ztable](https://cran.r-project.org/web/packages/ztable/vignettes/ztable.html)
+
+
+
+
