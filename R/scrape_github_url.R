@@ -58,7 +58,8 @@ scrape_github_package_page <- function(package_name){
              test_coverage = ifelse(is.na(codecov), "NONE", "CodeCov"),
              stringsAsFactors = FALSE
   ) %>%
-    bind_cols(get_social_stats_from_html(page_html))
+    bind_cols(get_social_stats_from_html(page_html),
+              get_last_commit(page_html))
 
 }
 
@@ -74,4 +75,13 @@ get_social_stats_from_html <- function(page_html){
     dplyr::select(action, github_social) %>%
     tidyr::spread(action, github_social)
 
+}
+
+get_last_commit <- function(page_html){
+  page_html %>%
+    rvest::html_nodes("relative-time") %>%
+    purrr::map(xml_attrs) %>%
+    purrr::map_df(~as.list(.)) %>%
+    dplyr::mutate(date = gsub("T.*", "", datetime)) %>%
+    dplyr::transmute(last_commit = as.Date(date))
 }
