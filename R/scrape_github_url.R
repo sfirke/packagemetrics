@@ -94,9 +94,10 @@ get_last_issue_closed <- function(repo_url){
     dplyr::mutate(last_issue_closed = gsub("\n|updated","",last_issue_closed) %>%
              trimws %>%
              as.Date(., format = "%B %d, %Y")) %>%
-    dplyr::slice(1)
+    dplyr::mutate(last_issue_closed = Sys.Date() - last_issue_closed) %>%  
+    dplyr::slice(1) 
   if(nrow(result) == 0){
-    result <- tibble(last_issue_closed = as.Date(NA))
+    result <- tibble(last_issue_closed = Sys.Date() - as.Date(NA))
   }
   result
 }
