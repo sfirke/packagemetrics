@@ -12,6 +12,9 @@
 #' cran_metrics("dplyr")
 
 cran_metrics <- function(package_name) {
+  tv_packages <- c("broom",     "dplyr",     "forcats",   "ggplot2",   "haven",     "httr",      "hms",
+                          "jsonlite",  "lubridate", "magrittr",  "modelr",    "purrr",     "readr",     "readxl",
+                          "stringr",   "tibble",    "rvest",     "tidyr",     "xml2",      "tidyverse")
   cran %>%
   dplyr::filter(package %in% package_name) %>%
   dplyr::select(package, author,
@@ -24,7 +27,7 @@ cran_metrics <- function(package_name) {
   dplyr::mutate(
     author_new = purrr::map(author, ~gsub("aut, cre", "", .)),
     author_count = purrr::map(author_new, count_packages), #number of authors
-    tidyverse_happy = ifelse(stringr::str_detect(imports, paste(tidyverse::tidyverse_packages(), collapse="|")), 1, 0),
+    tidyverse_happy = ifelse(stringr::str_detect(imports, paste(tv_packages, collapse="|")), 1, 0),
     has_vignette_build = ifelse(is.na(vignettebuilder), 1, 0)
     ) %>%
   dplyr::select(-author_new, -(imports:reverse_enhances), -vignettebuilder) %>%
