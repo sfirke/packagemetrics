@@ -3,4 +3,5 @@
 export(cran_metrics)
 export(getGitHub)
 export(scrape_github_package_page)
+export(combine_metrics)
 importFrom(dplyr,"%>%")
