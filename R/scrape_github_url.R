@@ -11,7 +11,7 @@
 #'
 #'scrape_github_package_page("dplyr")
 #'# don't run:
-#'# tables[1:5] %>% purrr::map_df(scrape_github_package_page)
+#'# table_packages[1:5] %>% purrr::map_df(scrape_github_package_page)
 
 
 scrape_github_package_page <- function(package_name){
