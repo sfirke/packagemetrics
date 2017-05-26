@@ -16,5 +16,7 @@ A data.frame of package information.
 Get StackOverflow-related metrics for a package.
 }
 \examples{
+\dontrun{
 so_metrics("dplyr")
+}
 }
