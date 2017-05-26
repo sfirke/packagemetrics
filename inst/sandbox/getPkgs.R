@@ -1,5 +1,4 @@
 devtools::install_github("lshep/stackr")
-
 library(stackr) ## -> DESCRIPTION
 library(tidytext)
 
@@ -16,9 +15,25 @@ library(tidytext)
 #' @return A vector of packages mentioned in StackOverflow questions on the \code{topic}.
 #' @export
 #' @examples
-#' get_pkgs(topic = "table", tag = "r", pagesize = 100, num_pages = 2)
-get_pkgs <- function(topic, tag = "r", pagesize = 100, num_pages = 200,
-                    repos = "https://cran.rstudio.com", ...){
+#' get_pkgs(topics = "table", tag = "r", pagesize = 100, num_pages = 2)
+#' get_pkgs(topics = c("table", "memory"), tag = "r", pagesize = 100, num_pages = 2)
+get_pkgs <- function(topics, tag = "r", pagesize = 100, num_pages = 200, repos =
+                     "https://cran.rstudio.com", ...){
+
+    # get the list of packages
+    pkgs <- as.data.frame(available.packages(repos = repos)[,"Package"])
+    names(pkgs) <- "word"
+
+    if (length(topics) == 1L) {
+        get_pkgs_helper(topic=topics, pkgs, tag, pagesize, num_pages, ...)
+    }else{
+        Reduce(intersect, sapply(topics, FUN=get_pkgs_helper, pkgs = pkgs, tag =
+                                 tag, pagesize = pagesize, num_pages = num_pages, ...))
+    }
+
+}
+
+get_pkgs_helper<- function(topic, pkgs, tag = "r", pagesize = 100, num_pages = 200, ...){
 
     # get the questions from StackOverflow
     questions <- stackr::stack_search(tagged = tag, body = topic, filter = "withbody",
@@ -28,10 +43,6 @@ get_pkgs <- function(topic, tag = "r", pagesize = 100, num_pages = 200,
     body <- questions[, "body", drop = FALSE]
     tidyResults <-  tidytext::unnest_tokens_(body, output_col = "word", input_col = "body",
                                              token = "words")
-
-    # get the list of packages
-    pkgs <- as.data.frame(available.packages(repos = repos)[,"Package"])
-    names(pkgs) <- "word"
 
     # match words in question text with available packages
     mm <- match(as.character(pkgs[,"word"]), as.character(tidyResults[,"word"]))
