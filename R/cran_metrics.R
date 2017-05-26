@@ -18,7 +18,7 @@ cran_metrics <- function(package_name) {
     tidyverse_happy = ifelse(stringr::str_detect(imports, paste(tidyverse::tidyverse_packages(), collapse="|")), 1, 0),
     has_vignette_build = ifelse(is.na(vignettebuilder), 1, 0)
     ) %>%
-  select(-author_new, -(imports:reverse_enhances), -vignettebuilder)
+  dplyr::select(-author_new, -(imports:reverse_enhances), -vignettebuilder)
 }
 
 
