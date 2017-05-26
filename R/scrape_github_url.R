@@ -26,8 +26,10 @@ scrape_github_package_page <- function(package_name){
   }
   repo_url <- gh_info$GitHub
 
-  image_info <- repo_url %>%
-    xml2::read_html() %>%
+  page_html <- repo_url %>%
+    xml2::read_html()
+
+  image_info <- page_html %>%
     rvest::html_nodes("p img") %>%
     purrr::map(xml_attrs) %>%
     purrr::map_df(~as.list(.))
@@ -55,8 +57,31 @@ scrape_github_package_page <- function(package_name){
              ci = ci,
              test_coverage = ifelse(is.na(codecov), "NONE", "CodeCov"),
              stringsAsFactors = FALSE
-  )
+  ) %>%
+    bind_cols(get_social_stats_from_html(page_html),
+              get_last_commit(page_html))
 
 }
 
 
+get_social_stats_from_html <- function(page_html){
+  page_html %>%
+    rvest::html_nodes(".social-count") %>%
+    purrr::map(xml_attrs) %>%
+    purrr::map_df(~as.list(.)) %>%
+    dplyr::select(`aria-label`) %>%
+    dplyr::mutate(github_social = stringr::str_extract(`aria-label`, "[[:digit:]]+"),
+                  action = c("watchers", "stars", "forks")) %>%
+    dplyr::select(action, github_social) %>%
+    tidyr::spread(action, github_social)
+
+}
+
+get_last_commit <- function(page_html){
+  page_html %>%
+    rvest::html_nodes("relative-time") %>%
+    purrr::map(xml_attrs) %>%
+    purrr::map_df(~as.list(.)) %>%
+    dplyr::mutate(date = gsub("T.*", "", datetime)) %>%
+    dplyr::transmute(last_commit = as.Date(date))
+}
