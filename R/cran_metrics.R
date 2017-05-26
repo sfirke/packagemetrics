@@ -20,14 +20,15 @@ cran_metrics <- function(package_name) {
          vignettebuilder, published, title
          ) %>%
   dplyr::mutate_each(
-    funs(count = count_packages), depends:reverse_enhances) %>%
+    dplyr::funs(count = count_packages), depends:reverse_enhances) %>%
   dplyr::mutate(
     author_new = purrr::map(author, ~gsub("aut, cre", "", .)),
     author_count = purrr::map(author_new, count_packages), #number of authors
     tidyverse_happy = ifelse(stringr::str_detect(imports, paste(tidyverse::tidyverse_packages(), collapse="|")), 1, 0),
     has_vignette_build = ifelse(is.na(vignettebuilder), 1, 0)
     ) %>%
-  dplyr::select(-author_new, -(imports:reverse_enhances), -vignettebuilder)
+  dplyr::select(-author_new, -(imports:reverse_enhances), -vignettebuilder) %>%
+  dplyr::left_join(get_cran_downloads(package_name), by="package")
 }
 
 count_packages <- function(x){
@@ -36,7 +37,13 @@ count_packages <- function(x){
 
 
 get_cran_downloads <- function(package_name){
-  cran_dl_last_day = cranlogs::cran_downloads(packages = package_name, when = "last-day")
-  cran_dl_last_week = cranlogs::cran_downloads(packages = package_name, when = "last-week")
-  cran_dl_last_month = cranlogs::cran_downloads(packages = package_name, when = "last-month")
+  cran_dl_last_day <- cranlogs::cran_downloads(packages = package_name, when = "last-day") %>%
+    dplyr::rename(dl_last_day = count) %>%
+    select(package, dl_last_day)
+  cran_dl_last_week <- cranlogs::cran_downloads(packages = package_name, when = "last-week") %>%
+    dplyr::summarise(dl_last_week = sum(count))
+  cran_dl_last_month <- cranlogs::cran_downloads(packages = package_name, when = "last-month") %>%
+    dplyr::summarise(dl_last_month = sum(count))
+  dplyr::bind_cols(cran_dl_last_day, cran_dl_last_week, cran_dl_last_month)
 }
+
