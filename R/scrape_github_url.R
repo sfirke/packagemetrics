@@ -77,13 +77,12 @@ get_social_stats_from_html <- function(page_html){
 }
 
 get_last_commit <- function(page_html){
-    dateLastCommit <- 
-  page_html %>%
+  dateLastCommit <- page_html %>%
     rvest::html_nodes("relative-time") %>%
     purrr::map(xml2::xml_attrs) %>%
     purrr::map_df(~as.list(.)) %>%
     dplyr::mutate(date = gsub("T.*", "", datetime)) %>%
-    dplyr::transmute(last_commit = Sys.Date() - as.Date(date))
+    dplyr::transmute(last_commit = as.integer(Sys.Date() - as.Date(date))/30)
 }
 
 get_last_issue_closed <- function(repo_url){
@@ -95,10 +94,10 @@ get_last_issue_closed <- function(repo_url){
     dplyr::mutate(last_issue_closed = gsub("\n|updated","",last_issue_closed) %>%
              trimws %>%
              as.Date(., format = "%B %d, %Y")) %>%
-    dplyr::mutate(last_issue_closed = Sys.Date() - last_issue_closed) %>%  
-    dplyr::slice(1) 
+    dplyr::mutate(last_issue_closed = as.numeric(Sys.Date() - last_issue_closed)/30) %>%
+    dplyr::slice(1)
   if(nrow(result) == 0){
-    result <- tibble(last_issue_closed = Sys.Date() - as.Date(NA))
+    result <- tibble(last_issue_closed = as.numeric(NA))
   }
   result
 }
@@ -106,7 +105,7 @@ get_last_issue_closed <- function(repo_url){
 get_num_contributors <- function(page_html){
   page_html %>%
     rvest::html_nodes(".numbers-summary a") %>%
-    rvest::html_text() %>% str_match_all(" [0-9]+") %>% unlist() %>%
+    rvest::html_text() %>% stringr::str_match_all(" [0-9]+") %>% unlist() %>%
     dplyr::last() %>% as.numeric() %>%
     data.frame(contributors=.)
 }

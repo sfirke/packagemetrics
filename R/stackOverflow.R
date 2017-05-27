@@ -2,9 +2,10 @@
 # library(stackr) ## -> DESCRIPTION
 # library(tidytext)
 
-
 #' Get a list of CRAN packages associated with a topic
 #'
+#' @importFrom utils available.packages
+#' @importFrom graphics title
 #' @param topics What are you trying to do?
 #' @param tag StackOverflow tag.
 #' @param pagesize Size of each page to extract (max 100).
@@ -15,8 +16,10 @@
 #' @return A vector of packages mentioned in StackOverflow questions on the \code{topic}.
 #' @export
 #' @examples
+#' \dontrun{
 #' get_pkgs(topics = "table", tag = "r", pagesize = 100, num_pages = 2)
 #' get_pkgs(topics = c("table", "memory"), tag = "r", pagesize = 100, num_pages = 2)
+#' }
 get_pkgs <- function(topics, tag = "r", pagesize = 100, num_pages = 200, repos =
                      "https://cran.rstudio.com", ...){
 
@@ -60,9 +63,14 @@ get_pkgs_helper<- function(topic, pkgs, tag = "r", pagesize = 100, num_pages = 2
 #' @param num_pages Number of pages to extract.
 #' @param ... Passed on to \code{stack_search}.
 get_hits <- function(pkg, tag = "r", pagesize = 100, num_pages = 200, ...){
-    res <- stackr::stack_search(body = pkg, tagged = tag,  pagesize = pagesize,
-                                num_pages = num_pages, ...)
-    nrow(res)
+    res <- try(stackr::stack_search(body = pkg, tagged = tag,  pagesize = pagesize,
+                                num_pages = num_pages, ...), silent = TRUE)
+    if (inherits(res, "try-error")) {
+      res <- NA
+    } else {
+      res <- nrow(res)
+    }
+    return(res)
 }
 
 #' Get StackOverflow-related metrics for a package.
@@ -71,7 +79,9 @@ get_hits <- function(pkg, tag = "r", pagesize = 100, num_pages = 200, ...){
 #' @return A data.frame of package information.
 #' @export
 #' @examples
+#' \dontrun{
 #' so_metrics("dplyr")
+#' }
 so_metrics <- function(package_name){
   tibble::tibble(package = package_name,
          sohits = get_hits(pkg = package_name))
