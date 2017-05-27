@@ -80,9 +80,18 @@ get_last_commit <- function(page_html){
   dateLastCommit <- page_html %>%
     rvest::html_nodes("relative-time") %>%
     purrr::map(xml2::xml_attrs) %>%
-    purrr::map_df(~as.list(.)) %>%
-    dplyr::mutate(date = gsub("T.*", "", datetime)) %>%
-    dplyr::transmute(last_commit = as.integer(Sys.Date() - as.Date(date))/30)
+    purrr::map_df(~as.list(.))
+
+  if(nrow(dateLastCommit) == 0){
+   dateLastCommit <- dplyr::tibble(last_commit = NA_character_)
+  } else{
+    dateLastCommit <- dateLastCommit %>%
+      dplyr::mutate(date = gsub("T.*", "", datetime)) %>%
+      dplyr::transmute(last_commit = as.numeric(Sys.Date() - as.Date(date))/30)
+  }
+
+  dateLastCommit
+
 }
 
 get_last_issue_closed <- function(repo_url){
