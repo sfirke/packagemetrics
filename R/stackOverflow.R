@@ -2,9 +2,9 @@
 # library(stackr) ## -> DESCRIPTION
 # library(tidytext)
 
-
 #' Get a list of CRAN packages associated with a topic
 #'
+#' @importFrom("utils", "available.packages")
 #' @param topics What are you trying to do?
 #' @param tag StackOverflow tag.
 #' @param pagesize Size of each page to extract (max 100).
