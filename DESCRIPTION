@@ -17,7 +17,6 @@ Imports:
     rvest,
     cranlogs,
     janitor,
-    tidyverse,
     xml2,
     devtools,
     stackr,
