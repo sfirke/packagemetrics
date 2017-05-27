@@ -7,7 +7,7 @@
 scrape_github_package_page(package_name)
 }
 \arguments{
-\item{repo_url}{character string in the format "https://github.com/username/packagename"}
+\item{package_name}{name of package}
 }
 \value{
 a data.frame with metric info

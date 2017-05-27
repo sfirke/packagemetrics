@@ -3,7 +3,7 @@
 #' @description
 #' wrapper for combine_metrics for list of packages
 #'
-#' @param package_name list of CRAN packages - case-sensitive.
+#' @param package_names_list list of CRAN packages - case-sensitive.
 #'
 #' @return a tibble of package information
 #' @export

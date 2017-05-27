@@ -3,7 +3,7 @@
 #' @description
 #' Looks at metadata of the badge graphic URLs to determine if a package uses continuous integration and test coverage.
 #'
-#' @param repo_url character string in the format "https://github.com/username/packagename"
+#' @param package_name name of package
 #'
 #' @return a data.frame with metric info
 #' @export
