@@ -13,6 +13,8 @@
 
 getGitHub <- function(packages){
 
+  inCran(packages)
+  
   cran_urls <- cran %>%
     dplyr::filter(package %in% packages) %>%
     dplyr::select(package, url, bugreports)
@@ -41,3 +43,10 @@ getGitHub <- function(packages){
     dplyr::mutate(ongithub = !is.na(github_url))
 
 }
+
+inCran <- function(package){
+  #stopifnot(package %in% cran$package)
+  if(! (package %in% cran$package )) stop("Package ",  package, " not in CRAN.  Only supply packages that exists in CRAN")
+}
+
+
