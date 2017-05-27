@@ -7,7 +7,7 @@
 package_list_metrics(package_names_list)
 }
 \arguments{
-\item{package_name}{list of CRAN packages - case-sensitive.}
+\item{package_names_list}{list of CRAN packages - case-sensitive.}
 }
 \value{
 a tibble of package information
