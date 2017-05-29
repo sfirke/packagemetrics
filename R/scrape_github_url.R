@@ -20,6 +20,12 @@ scrape_github_package_page <- function(package_name){
     return(data.frame(package = package_name,
                       ci = "Not on GitHub",
                       test_coverage = "Not on GitHub",
+                      forks = NA,
+                      stars = NA,
+                      watchers = NA,
+                      last_commit = NA,
+                      last_issue_closed = NA,
+                      contributors = NA,
                       stringsAsFactors = FALSE
                       )
           )
@@ -83,7 +89,8 @@ get_last_commit <- function(page_html){
     purrr::map_df(~as.list(.))
 
   if(nrow(dateLastCommit) == 0){
-   dateLastCommit <- dplyr::tibble(last_commit = NA_character_)
+  # dateLastCommit <- dplyr::tibble(last_commit = NA_character_)
+    dateLastCommit <- dplyr::tibble(last_commit = NA)
   } else{
     dateLastCommit <- dateLastCommit %>%
       dplyr::mutate(date = gsub("T.*", "", datetime)) %>%
@@ -106,7 +113,7 @@ get_last_issue_closed <- function(repo_url){
     dplyr::mutate(last_issue_closed = as.numeric(Sys.Date() - last_issue_closed)/30) %>%
     dplyr::slice(1)
   if(nrow(result) == 0){
-    result <- tibble(last_issue_closed = as.numeric(NA))
+    result <- dplyr::tibble(last_issue_closed = as.numeric(NA))
   }
   result
 }
