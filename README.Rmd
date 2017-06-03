@@ -4,7 +4,7 @@ output: github_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE, message=FALSE)
 ```
 
 ## rOpenSci Unconference 2017 project repo
@@ -68,37 +68,64 @@ Develop a process for assessing and comparing a set of packages. Action items in
 - User-friendliness - is it modular, “tidy”, clean syntax, coherent theory, not flexible, not trying to do too much
 - Are there any/many blog posts on/which mention a pkg?
 
-## Example using case study of popular table-making packages.  
-
-### First, let's generate the metrics on the packages of interest
+## Installation
 ```
+devtools::install_github("ropenscilabs/packagemetrics")
+```
+
+## Use
+
+### Here's an example using a case study of popular table-making packages.  
+
+```{r, echo=TRUE}
 library(packagemetrics)
 
-pkg_df <- map_df(table_packages, ~combine_metrics(.)) 
+pkg_df <- package_list_metrics(table_packages)
 ```
 
-### Now make a table of tables :)
+```{r, echo=FALSE}
+library(dplyr)
+library(formattable)
+t <- pkg_df %>% 
+  select(package, published, dl_last_month, stars,
+         tidyverse_happy, has_tests, has_vignette_build, 
+         last_commit, last_issue_closed, contributors, 
+         depends_count, reverse_count) %>% 
+  mutate(last_commit = round(last_commit, 1),
+         last_issue_closed = round(last_issue_closed, 1)) %>% 
+  rename(vignette = has_vignette_build) %>% 
+  formattable(., list(
+    package=formatter("span",
+                      style = x ~ style(font.weight = "bold")),
+    contributors = color_tile("white","#1CC2E3"),
+    depends_count = color_tile("white", "#1CC2E3"),
+    reverse_count = color_tile("white", "#1CC2E3"),
+    tidyverse_happy = formatter("span",
+                                style = x ~ style(color = ifelse(x, "purple","white")),
+                                x ~ icontext(ifelse(x, "glass","glass"))),
+    vignette = formatter("span",
+                         style = x ~ style(color = ifelse(x, "green","white")),
+                         x ~ icontext(ifelse(x, "ok","ok"))),
+    has_tests =  formatter("span",
+                           style = x ~ style(color = ifelse(x, "green","red")),
+                           x ~ icontext(ifelse(x, "ok","remove"))),
+    dl_last_month = color_bar("#56A33E"),
+    forks = color_tile("white", "#56A33E"),
+    stars = color_tile("white", "#56A33E"),
+    last_commit = color_tile("#F06B13","white", na.rm=T),
+    last_issue_closed = color_tile("#F06B13","white", na.rm=T)
+  ))
+
+w <- formattable::as.htmlwidget(t,width=1000, height=NULL)
+path <- htmltools::html_print(w, background = "white", viewer = NULL)
+url <- paste0("file:///", gsub("\\\\", "/", normalizePath(path)))
+webshot::webshot(url,
+                 file = "inst/image/table.png",
+                 selector = ".formattable_widget",
+                 delay = 0.2)
+
 ```
-t <- formattable(tt2, list(
-  package=formatter("span",
-                    style = x ~ style(font.weight = "bold")),
-  contributors = color_tile("white","#1CC2E3"),
-  depends_count = color_tile("white", "#1CC2E3"),
-  reverse_count = color_tile("white", "#1CC2E3"),
-  tidyverse_happy = formatter("span",
-                              style = x ~ style(color = ifelse(x, "purple","white")),
-                              x ~ icontext(ifelse(x, "glass","glass"))),
-  vignette = formatter("span",
-                                 style = x ~ style(color = ifelse(x, "green","white")),
-                                 x ~ icontext(ifelse(x, "ok","ok"))),
-  has_tests =  formatter("span",
-                  style = x ~ style(color = ifelse(x, "green","red")),
-                  x ~ icontext(ifelse(x, "ok","remove"))),
-  dl_last_month = color_bar("#56A33E"),
-  forks = color_tile("white", "#56A33E"),
-  stars = color_tile("white", "#56A33E"),
-  last_commit = color_tile("#F06B13","white", na.rm=T),
-  last_issue_closed = color_tile("#F06B13","white", na.rm=T)
-))
-```
-![formattable-tables-pkgs](format_metrics_example.png)
+
+## Requirements
+
+```packagemetrics``` requires R version >= 3.4.0.

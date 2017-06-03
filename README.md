@@ -64,37 +64,25 @@ Collection of ideas for metrics:
 -   User-friendliness - is it modular, “tidy”, clean syntax, coherent theory, not flexible, not trying to do too much
 -   Are there any/many blog posts on/which mention a pkg?
 
-Example using case study of popular table-making packages.
-----------------------------------------------------------
+Installation
+------------
 
-### First, let's generate the metrics on the packages of interest
+    devtools::install_github("ropenscilabs/packagemetrics")
 
-    library(packagemetrics)
+Use
+---
 
-    pkg_df <- map_df(table_packages, ~combine_metrics(.)) 
+### Here's an example using a case study of popular table-making packages.
 
-### Now make a table of tables :)
+``` r
+library(packagemetrics)
 
-    t <- formattable(tt2, list(
-      package=formatter("span",
-                        style = x ~ style(font.weight = "bold")),
-      contributors = color_tile("white","#1CC2E3"),
-      depends_count = color_tile("white", "#1CC2E3"),
-      reverse_count = color_tile("white", "#1CC2E3"),
-      tidyverse_happy = formatter("span",
-                                  style = x ~ style(color = ifelse(x, "purple","white")),
-                                  x ~ icontext(ifelse(x, "glass","glass"))),
-      vignette = formatter("span",
-                                     style = x ~ style(color = ifelse(x, "green","white")),
-                                     x ~ icontext(ifelse(x, "ok","ok"))),
-      has_tests =  formatter("span",
-                      style = x ~ style(color = ifelse(x, "green","red")),
-                      x ~ icontext(ifelse(x, "ok","remove"))),
-      dl_last_month = color_bar("#56A33E"),
-      forks = color_tile("white", "#56A33E"),
-      stars = color_tile("white", "#56A33E"),
-      last_commit = color_tile("#F06B13","white", na.rm=T),
-      last_issue_closed = color_tile("#F06B13","white", na.rm=T)
-    ))
+pkg_df <- package_list_metrics(table_packages)
+```
 
-![formattable-tables-pkgs](format_metrics_example.png)
+![](README_files/figure-markdown_github/unnamed-chunk-2-1.png)
+
+Requirements
+------------
+
+`packagemetrics` requires R version &gt;= 3.4.0.
