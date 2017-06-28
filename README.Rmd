@@ -81,51 +81,17 @@ devtools::install_github("ropenscilabs/packagemetrics")
 library(packagemetrics)
 
 pkg_df <- package_list_metrics(table_packages)
+ft <- metrics_table(pkg_df)
 ```
 
 ```{r, echo=FALSE}
-library(dplyr)
-library(formattable)
-pd <- pkg_df %>% 
-  select(package, published, dl_last_month, stars,
-         tidyverse_happy, has_tests, has_vignette_build, 
-         last_commit, last_issue_closed, contributors, 
-         depends_count, reverse_count) %>% 
-  mutate(last_commit = round(last_commit, 1),
-         last_issue_closed = round(last_issue_closed, 1)) %>% 
-  rename(vignette = has_vignette_build) 
-pd[is.na(pd)] <- ""
-
-t <- formattable(pd, list(
-    package=formatter("span",
-                      style = x ~ style(font.weight = "bold")),
-    contributors = color_tile("white","#1CC2E3"),
-    depends_count = color_tile("white", "#1CC2E3"),
-    reverse_count = color_tile("white", "#1CC2E3"),
-    tidyverse_happy = formatter("span",
-                                style = x ~ style(color = ifelse(x, "purple","white")),
-                                x ~ icontext(ifelse(x, "glass","glass"))),
-    vignette = formatter("span",
-                         style = x ~ style(color = ifelse(x, "green","white")),
-                         x ~ icontext(ifelse(x, "ok","ok"))),
-    has_tests =  formatter("span",
-                           style = x ~ style(color = ifelse(x, "green","red")),
-                           x ~ icontext(ifelse(x, "ok","remove"))),
-    dl_last_month = color_bar("#56A33E"),
-    forks = color_tile("white", "#56A33E"),
-    stars = color_tile("white", "#56A33E"),
-    last_commit = color_tile("#F06B13","white", na.rm=T),
-    last_issue_closed = color_tile("#F06B13","white", na.rm=T)
-  ))
-
-w <- formattable::as.htmlwidget(t,width=1200, height=NULL)
+w <- formattable::as.htmlwidget(ft, width = 1200, height = NULL)
 path <- htmltools::html_print(w, background = "white", viewer = NULL)
 url <- paste0("file:///", gsub("\\\\", "/", normalizePath(path)))
 webshot::webshot(url,
                  file = "inst/image/table.png",
                  selector = ".formattable_widget",
                  delay = 0.2)
-
 ```
 
 ## Requirements
