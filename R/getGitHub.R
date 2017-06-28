@@ -19,11 +19,11 @@ getGitHub <- function(packages){
     dplyr::filter(package %in% packages) %>%
     dplyr::select(package, url, bugreports)
 
-
   url <- cran_urls$url[2] #temp
   find_github <- function(url){
     url <- gsub("\n", ",", url)
-    url <- gsub(" ", "", url)
+    url <- gsub("^ | $", "", url)
+    url <- gsub(" ", ",", url)
     url <- gsub("https", "http", url)
     url <- gsub("http", "https", url)
     url_list <- stringr::str_split(url, ",")[[1]]
