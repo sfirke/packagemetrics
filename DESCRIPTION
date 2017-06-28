@@ -21,7 +21,8 @@ Imports:
     devtools,
     stackr,
     tidytext,
-    tibble
+    tibble,
+    formattable
 Remotes: lshep/stackr
 License: MIT + file LICENSE
 Encoding: UTF-8
