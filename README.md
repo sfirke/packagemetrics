@@ -81,7 +81,7 @@ pkg_df <- package_list_metrics(table_packages)
 ft <- metrics_table(pkg_df)
 ```
 
-    ## NULL
+![](README_files/figure-markdown_github/unnamed-chunk-2-1.png)
 
 Requirements
 ------------
