@@ -119,9 +119,12 @@ get_last_issue_closed <- function(repo_url){
 }
 
 get_num_contributors <- function(page_html){
-  page_html %>%
+  no_of_contributors <- page_html %>%
     rvest::html_nodes(".numbers-summary a") %>%
     rvest::html_text() %>% stringr::str_match_all(" [0-9]+") %>% unlist() %>%
-    dplyr::last() %>% as.numeric() %>%
-    data.frame(contributors=.)
+    dplyr::last() %>% as.numeric()
+  
+  if(length(no_of_contributors) == 0L) no_of_contributors = NA
+  
+  data.frame(contributors = no_of_contributors)
 }
