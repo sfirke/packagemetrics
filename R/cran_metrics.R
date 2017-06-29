@@ -1,7 +1,7 @@
 #' @title Get CRAN-related metrics for a package.
 #'
 #' @description
-#' Searches CRAN database to pull information like depnedencies, reverse dependencies, etc.
+#' Searches CRAN database to pull information like dependencies, reverse dependencies, etc.
 #'
 #' @param package_name name of CRAN package - case-sensitive.
 #'
@@ -25,7 +25,7 @@ cran_metrics <- function(package_name) {
   dplyr::mutate_each(
     dplyr::funs(count = count_packages), depends:reverse_depends) %>%
   dplyr::mutate(
-    tidyverse_happy = ifelse(stringr::str_detect(imports, paste(tv_packages, collapse="|")), TRUE, FALSE),
+    tidyverse_happy = ifelse(stringr::str_detect(imports, paste(tv_packages, collapse = "|")), TRUE, FALSE),
     has_vignette_build = ifelse(is.na(vignettebuilder), FALSE, TRUE),
     has_tests = ifelse(stringr::str_detect(suggests, "testthat|RUnit"), TRUE, FALSE),
     has_tests = ifelse(is.na(has_tests), FALSE, has_tests),
