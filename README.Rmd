@@ -69,7 +69,7 @@ Develop a process for assessing and comparing a set of packages. Action items in
 - Are there any/many blog posts on/which mention a pkg?
 
 ## Installation
-```
+```r
 devtools::install_github("ropenscilabs/packagemetrics")
 ```
 

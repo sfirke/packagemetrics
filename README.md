@@ -67,7 +67,9 @@ Collection of ideas for metrics:
 Installation
 ------------
 
-    devtools::install_github("ropenscilabs/packagemetrics")
+``` r
+devtools::install_github("ropenscilabs/packagemetrics")
+```
 
 Use
 ---
