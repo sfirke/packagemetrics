@@ -1,5 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 
-inst/sandbox
-analysis.Rmd
+README.Rmd
+README.md
+README_files/
