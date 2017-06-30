@@ -47,24 +47,21 @@ scrape_github_package_page <- function(package_name){
   travis <- sum(stringr::str_detect(image_info$`data-canonical-src`, "travis-ci"), na.rm = TRUE) >0
   appveyor <- sum(stringr::str_detect(image_info$`data-canonical-src`, "appveyor"), na.rm = TRUE) > 0
   codecov <- sum(stringr::str_detect(image_info$`data-canonical-src`, "codecov"), na.rm = TRUE) > 0
-  ci <- dplyr::case_when(
-    !travis & !appveyor ~ "NONE",
-    travis & appveyor ~ "Travis, Appveyor",
-    travis ~ "Travis",
-    appveyor ~ "Appveyor"
-  )
+  ci <- dplyr::case_when(!travis & !appveyor ~ "NONE",
+                         travis & appveyor ~ "Travis, Appveyor",
+                         travis ~ "Travis",
+                         appveyor ~ "Appveyor")
   }
 
   data.frame(package = package_name,
              ci = ci,
-             test_coverage = ifelse(is.na(codecov), "NONE", "CodeCov"),
+             test_coverage = ifelse(codecov, "CodeCov", "NONE"),
              stringsAsFactors = FALSE
   ) %>%
     dplyr::bind_cols(get_social_stats_from_html(page_html),
               get_last_commit(page_html),
               get_last_issue_closed(repo_url),
               get_num_contributors(page_html))
-
 }
 
 
@@ -123,8 +120,8 @@ get_num_contributors <- function(page_html){
     rvest::html_nodes(".numbers-summary a") %>%
     rvest::html_text() %>% stringr::str_match_all(" [0-9]+") %>% unlist() %>%
     dplyr::last() %>% as.numeric()
-  
+
   if(length(no_of_contributors) == 0L) no_of_contributors = NA
-  
+
   data.frame(contributors = no_of_contributors)
 }
