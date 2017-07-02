@@ -13,7 +13,7 @@ cran_metrics(package_name)
 a tibble of package information.
 }
 \description{
-Searches CRAN database to pull information like depnedencies, reverse dependencies, etc.
+Searches CRAN database to pull information like dependencies, reverse dependencies, etc.
 }
 \examples{
 

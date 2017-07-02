@@ -7,12 +7,16 @@
 metrics_table(pkg_df)
 }
 \arguments{
-\item{pkg_df}{A data.frame of package metrics as returned by \link{\code{package_list_metrics}}.}
+\item{pkg_df}{A data.frame of package metrics as returned by \code{ackage_list_metrics}.}
+}
+\description{
+Produce a formatted table of package metrics.
 }
 \examples{
+
 pkgs <- package_list_metrics(list("dplyr", "tidyr", "ggplot2"))
 metrics_table(pkgs)
 }
 \seealso{
-\link{\code{package_list_metrics}}
+\code{package_list_metrics}
 }

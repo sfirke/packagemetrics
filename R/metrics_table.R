@@ -1,11 +1,15 @@
 #' @title Formatted table of package metrics
 #'
-#' @param pkg_df A data.frame of package metrics as returned by \link{\code{package_list_metrics}}.
+#' @description
+#' Produce a formatted table of package metrics.
 #'
-#' @seealso \link{\code{package_list_metrics}}
+#' @param pkg_df A data.frame of package metrics as returned by \code{ackage_list_metrics}.
+#'
+#' @seealso \code{package_list_metrics}
 #'
 #' @export
 #' @examples
+#'
 #' pkgs <- package_list_metrics(list("dplyr", "tidyr", "ggplot2"))
 #' metrics_table(pkgs)
 
