@@ -7,66 +7,13 @@ output: github_document
 knitr::opts_chunk$set(echo = FALSE, message=FALSE)
 ```
 
-## rOpenSci Unconference 2017 project repo
+## About packagemetrics 
 
-This repo is for a package to obtain a collection of metrics on R packages which are intended to inform the decision which package you choose for a certain task.
+The packagemetrics project was a part of the 2017 rOpenSci Unconference. With over 10,000 packages on CRAN - and thousands more on GitHub and Bioconductor - a useR needs a way to navigate this wealth of options. There are many existing tools that are helpful for finding packages, but few ways to quickly compare differences between packages. We set out to create tools for comparing a set of related and potentially overlapping packages through a combination of standardized packagemetrics and an expert review process.  More information about our project can be found in this [post](https://ropensci.org/blog/blog/2017/06/27/packagemetrics).
 
-This is based on issues [#78 Avoiding redundant / overlapping packages](https://github.com/ropensci/unconf17/issues/78) and [#69 A framework for reproducible tables](https://github.com/ropensci/unconf17/issues/69) for the unconf 17.
-
-## Team members:
+## Team packagemetrics:
 
 Lori Shepherd, Hannah Frick, William Ampeh, Erin Grand, Sam Firke, Becca Krouse
-
-## Goals:
-
-Develop a process for assessing and comparing a set of packages. Action items include:
-
-- Develop a set of objective metrics based off of CRAN/GitHub/StackOverflow
-- Develop a process for subjective assessment
-- Apply to a set of table-making packages
-
-## Collection of ideas for metrics:
-
-### CRAN
-
-- Does it have a public repo?
-- Does it have an issue tracker or similar?
-- Dependencies
-    - Reverse dependencies - are others depending on this?
-    - Dependencies - is it built on a solid stack?
-- Is the package being maintained?
-    - Date of first release?
-    - Date of latest release
-- Does it have a vignette (how many?)
-
-
-### GitHub
-
-- Is the package being maintained?
-    - Last commit?
-    - How many users have committed in the last [interval of time]?
-    - Issue tracker?
-    - When was the last issue closed?
-- Tests    
-    - Does the package have tests?
-    - What's the test coverage?
-    - Does it have continuous integration?
-- Analysis of help pages 
-    - Keywords
-    - Similarity of multiple pkgs
-    - What % of function man pages have an example?
-- What packages are commonly co-mentioned with it?  Could be in its own documentation/vignette or on GitHub scripts where it is mentioned
-
-
-### StackOverflow
-
-- Popularity in stackoverflow answers 
-- What packages are commonly co-mentioned with it?
-
-### Other
-
-- User-friendliness - is it modular, “tidy”, clean syntax, coherent theory, not flexible, not trying to do too much
-- Are there any/many blog posts on/which mention a pkg?
 
 ## Installation
 ```r
