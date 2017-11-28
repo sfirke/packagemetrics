@@ -4,12 +4,14 @@
 \alias{combine_metrics}
 \title{Combines metrics on a package from CRAN and Github}
 \usage{
-combine_metrics(package_name, includeSO = FALSE)
+combine_metrics(package_name, includeSO = FALSE, forget = FALSE)
 }
 \arguments{
 \item{package_name}{name of CRAN package - case-sensitive.}
 
 \item{includeSO}{Logical. Include metrics from StackOverflow?}
+
+\item{forget}{logical, default \code{FALSE}. Reset the CRAN package cache.}
 }
 \value{
 a tibble of package information.
@@ -20,5 +22,4 @@ Combines metrics on a package from CRAN and Github
 \examples{
 
 combine_metrics("dplyr")
-
 }

@@ -4,7 +4,7 @@
 \alias{cran_metrics}
 \title{Get CRAN-related metrics for a package.}
 \usage{
-cran_metrics(package_name)
+cran_metrics(package_name, forget = FALSE)
 }
 \arguments{
 \item{package_name}{name of CRAN package - case-sensitive.}

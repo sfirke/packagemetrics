@@ -3,6 +3,7 @@
 export(combine_metrics)
 export(cran_metrics)
 export(getGitHub)
+export(get_cran)
 export(get_pkgs)
 export(metrics_table)
 export(package_list_metrics)
