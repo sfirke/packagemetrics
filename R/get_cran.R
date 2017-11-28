@@ -1,4 +1,4 @@
-get_memoise_cran <- memoise::memoise(
+get_memoise_cran <- memoise::memoise({
   function() {
     cran <- tools::CRAN_package_db()
     # remove first instance of column name MD5Sum
@@ -10,7 +10,7 @@ get_memoise_cran <- memoise::memoise(
       janitor::clean_names() %>%
       janitor::remove_empty_cols()
     cran
-  }
+  }}
 )
 
 
@@ -22,8 +22,8 @@ get_memoise_cran <- memoise::memoise(
 #' the original tibble.
 #' @param forget logical, default \code{FALSE}. Reset the CRAN package cache.
 #' @export
-#' @examples
 #' @importFrom memoise memoise forget
+#' @examples
 #' cran <- get_cran()
 get_cran <- function(forget = FALSE) {
   if(forget)
