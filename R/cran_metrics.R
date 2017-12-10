@@ -11,10 +11,11 @@
 #'
 #' cran_metrics("dplyr")
 
-cran_metrics <- function(package_name) {
+cran_metrics <- function(package_name, forget = FALSE) {
   tv_packages <- c("broom",     "dplyr",     "forcats",   "ggplot2",   "haven",     "httr",      "hms",
                    "jsonlite",  "lubridate", "magrittr",  "modelr",    "purrr",     "readr",     "readxl",
                    "stringr",   "tibble",    "rvest",     "tidyr",     "xml2",      "tidyverse")
+  cran = get_cran(forget)
   cran %>%
   dplyr::filter(package %in% package_name) %>%
   dplyr::select(package,

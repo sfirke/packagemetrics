@@ -4,10 +4,12 @@
 \alias{package_list_metrics}
 \title{Get metrics for a list of packages.}
 \usage{
-package_list_metrics(package_names_list)
+package_list_metrics(package_names_list, forget = FALSE)
 }
 \arguments{
 \item{package_names_list}{list of CRAN packages - case-sensitive.}
+
+\item{forget}{logical, default \code{FALSE}. Reset the CRAN package cache.}
 }
 \value{
 a tibble of package information

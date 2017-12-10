@@ -4,7 +4,7 @@
 \alias{getGitHub}
 \title{Get GitHub URLs for a set of package names (if they exist).}
 \usage{
-getGitHub(packages)
+getGitHub(packages, forget = FALSE)
 }
 \arguments{
 \item{packages}{character vector of CRAN package names - case-sensitive.}
