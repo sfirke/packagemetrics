@@ -22,12 +22,22 @@ devtools::install_github("ropenscilabs/packagemetrics")
 
 ## Use
 
-### Here's an example using a case study of popular table-making packages.  
+**Comparing dplyr and data.table:**
 
 ```{r, echo=TRUE}
 library(packagemetrics)
+library(dplyr)
 
-pkg_df <- package_list_metrics(table_packages)
+dplyr_and_dt <- package_list_metrics(c("dplyr", "data.table"))
+glimpse(dplyr_and_dt)
+```
+
+### Creating a pretty metrics_table
+
+Here's a comparison of popular table-making packages, using the `metrics_table` function:
+
+```{r, echo = TRUE}
+pkg_df <- package_list_metrics(table_packages) # included vector of table pkgs
 ft <- metrics_table(pkg_df)
 ```
 
@@ -40,6 +50,12 @@ webshot::webshot(url,
                  selector = ".formattable_widget",
                  delay = 0.2)
 ```
+
+## Refreshing data sources
+
+If the cached CRAN data gets out of date, call `get_cran(forget = TRUE)` to force refreshing.  This will fetch the latest results from CRAN and cache them for use going forward.
+
+GitHub data is scraped at the time of the call to `package_list_metrics`.
 
 ## Requirements
 
