@@ -13,9 +13,10 @@ metrics_table(pkg_df)
 Produce a formatted table of package metrics.
 }
 \examples{
-
+\dontrun{
 pkgs <- package_list_metrics(list("dplyr", "tidyr", "ggplot2"))
 metrics_table(pkgs)
+}
 }
 \seealso{
 \code{package_list_metrics}
