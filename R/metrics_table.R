@@ -3,7 +3,7 @@
 #' @description
 #' Produce a formatted table of package metrics.
 #'
-#' @param pkg_df A data.frame of package metrics as returned by \code{ackage_list_metrics}.
+#' @param pkg_df A data.frame of package metrics as returned by \code{package_list_metrics}.
 #'
 #' @seealso \code{package_list_metrics}
 #'
