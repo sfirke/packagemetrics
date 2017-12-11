@@ -33,19 +33,19 @@ metrics_table <- function(pkg_df){
     reverse_count = formattable::color_tile("white", "#1CC2E3"),
     tidyverse_happy = formattable::formatter("span",
                                              style = x ~ formattable::style(
-                                               color = ifelse(x, "purple","white")),
-                                             x ~ formattable::icontext(ifelse(x, "glass","glass"))),
+                                               color = ifelse(x, "purple", "white")),
+                                             x ~ formattable::icontext(ifelse(x, "glass", "glass"))),
     vignette = formattable::formatter("span",
-                         style = x ~ formattable::style(color = ifelse(x, "green","white")),
+                         style = x ~ formattable::style(color = ifelse(x, "green", "white")),
                          x ~ formattable::icontext(ifelse(x, "ok","ok"))),
     has_tests =  formattable::formatter("span",
-                           style = x ~ formattable::style(color = ifelse(x, "green","red")),
-                           x ~ formattable::icontext(ifelse(x, "ok","remove"))),
+                           style = x ~ formattable::style(color = ifelse(x, "green", "red")),
+                           x ~ formattable::icontext(ifelse(x, "ok", "remove"))),
     dl_last_month = formattable::color_bar(color = "#56A33E", fun = formattable::proportion),
     forks = formattable::color_tile("white", "#56A33E"),
     stars = formattable::color_tile("white", "#56A33E"),
-    last_commit = formattable::color_tile("#F06B13","white", na.rm=T),
-    last_issue_closed = formattable::color_tile("#F06B13","white", na.rm=T)
+    last_commit = formattable::color_tile("#F06B13", "white", na.rm=TRUE),
+    last_issue_closed = formattable::color_tile("#F06B13", "white", na.rm=TRUE)
   ))
 
   return(ft)
