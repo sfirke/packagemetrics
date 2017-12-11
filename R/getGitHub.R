@@ -4,7 +4,7 @@
 #' Looks at both Package URL and BugReports URL, returns GitHub URL if present in either.
 #'
 #' @param packages character vector of CRAN package names - case-sensitive.
-#'
+#' @inheritParams get_cran
 #' @return a vector of URLs.
 #' @export
 #' @examples

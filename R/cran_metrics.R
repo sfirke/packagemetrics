@@ -4,6 +4,7 @@
 #' Searches CRAN database to pull information like dependencies, reverse dependencies, etc.
 #'
 #' @param package_name name of CRAN package - case-sensitive.
+#' @inheritParams get_cran
 #'
 #' @return a tibble of package information.
 #' @export

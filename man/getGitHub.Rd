@@ -8,6 +8,8 @@ getGitHub(packages, forget = FALSE)
 }
 \arguments{
 \item{packages}{character vector of CRAN package names - case-sensitive.}
+
+\item{forget}{logical, default \code{FALSE}. Reset the CRAN package cache.}
 }
 \value{
 a vector of URLs.
