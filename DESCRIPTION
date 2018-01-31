@@ -7,8 +7,7 @@ Authors@R: c(person("Sam", "Firke", email = "samuel.firke@gmail.com", role = c("
              person("Lori", "Shepherd", email = "lori.shepherd@roswellpark.org", role = "aut"),
              person("William","Ampeh", email = "wampeh@gmu.edu", role = "aut"),
              person("Hannah", "Frick", email = "hannah.frick@gmail.com", role = "aut"),
-             person("Gillespie", "Colin", email = "csgillespie+github@gmail.com", role = "ctb"))
-
+             person("Gillespie", "Colin", email = "colin@jumpingrivers.com", role = "ctb"))
 Description: This package was designed to address two issues, 78 and 69, for the ROpenSci unconf17 concerning avoiding redundant / overlapping packages and a framework for reproducible tables. As this is a complex topic, the smaller tasks being accomplished is producing a list of metrics that can be used to compare similar packages utilizing information collected from CRAN, GitHub, and StackOverflow.
 Depends: R (>= 3.4.0)
 Imports:
