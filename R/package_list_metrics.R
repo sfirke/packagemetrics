@@ -9,8 +9,9 @@
 #' @return a tibble of package information
 #' @export
 #' @examples
-#'
+#' \dontrun{
 #' package_list_metrics(list("dplyr", "tidyr", "ggplot2"))
+#' }
 
 package_list_metrics <- function(package_names_list, forget = FALSE) {
   purrr::map_df(package_names_list, combine_metrics, forget)

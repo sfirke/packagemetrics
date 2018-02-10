@@ -18,6 +18,7 @@ a tibble of package information
 wrapper for combine_metrics for list of packages
 }
 \examples{
-
+\dontrun{
 package_list_metrics(list("dplyr", "tidyr", "ggplot2"))
+}
 }

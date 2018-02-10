@@ -8,6 +8,8 @@ cran_metrics(package_name, forget = FALSE)
 }
 \arguments{
 \item{package_name}{name of CRAN package - case-sensitive.}
+
+\item{forget}{logical, default \code{FALSE}. Reset the CRAN package cache.}
 }
 \value{
 a tibble of package information.

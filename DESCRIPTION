@@ -1,6 +1,6 @@
 Package: packagemetrics
 Title: Collect Metrics on Packages from CRAN, GitHub, and StackOverflow
-Version: 0.0.1.9000
+Version: 0.0.1.9001
 Authors@R: c(person("Sam", "Firke", email = "samuel.firke@gmail.com", role = c("aut", "cre")),
              person("Becca", "Krouse", email = "becca.krouse@gmail.com", role = "aut"),
              person("Erin", "Grand", email = "eringrand@gmail.com", role = "aut"),
@@ -8,7 +8,11 @@ Authors@R: c(person("Sam", "Firke", email = "samuel.firke@gmail.com", role = c("
              person("William","Ampeh", email = "wampeh@gmu.edu", role = "aut"),
              person("Hannah", "Frick", email = "hannah.frick@gmail.com", role = "aut"),
              person("Gillespie", "Colin", email = "colin@jumpingrivers.com", role = "ctb"))
-Description: This package was designed to address two issues, 78 and 69, for the ROpenSci unconf17 concerning avoiding redundant / overlapping packages and a framework for reproducible tables. As this is a complex topic, the smaller tasks being accomplished is producing a list of metrics that can be used to compare similar packages utilizing information collected from CRAN, GitHub, and StackOverflow.
+Description: This package was designed to address two issues, 78 and 69, for the ROpenSci 
+            unconf17 concerning avoiding redundant / overlapping packages and a framework for 
+            reproducible tables. As this is a complex topic, the smaller tasks being accomplished 
+            is producing a list of metrics that can be used to compare similar packages utilizing 
+            information collected from CRAN, GitHub, and StackOverflow.
 Depends: R (>= 3.4.0)
 Imports:
     dplyr,
