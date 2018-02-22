@@ -6,9 +6,16 @@ get_memoise_cran <- memoise::memoise({
 
     # make it a tibble
     cran <- dplyr::tbl_df(cran)
-    cran <- cran %>%
-      janitor::clean_names() %>%
-      janitor::remove_empty_cols()
+
+    if (packageVersion("janitor") > "0.3.1") {
+      cran <- cran %>%
+        janitor::clean_names(case = "old_janitor") %>%
+        janitor::remove_empty("cols")
+    } else {
+      cran <- cran %>%
+        janitor::clean_names() %>%
+        janitor::remove_empty_cols()
+    }
     cran
   }}
 )
