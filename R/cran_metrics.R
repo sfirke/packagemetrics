@@ -17,6 +17,11 @@ cran_metrics <- function(package_name, forget = FALSE) {
                    "jsonlite",  "lubridate", "magrittr",  "modelr",    "purrr",     "readr",     "readxl",
                    "stringr",   "tibble",    "rvest",     "tidyr",     "xml2",      "tidyverse")
   cran = get_cran(forget)
+
+  if (!(package_name %in% cran$package))
+    stop(sprintf("Package %s not in CRAN. Only supply packages that exists in CRAN",
+         package_name))
+
   cran %>%
   dplyr::filter(package %in% package_name) %>%
   dplyr::select(package,
