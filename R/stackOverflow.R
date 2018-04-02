@@ -24,7 +24,7 @@ get_pkgs <- function(topics, tag = "r", pagesize = 100, num_pages = 200, repos =
                      "https://cran.rstudio.com", ...){
 
     # get the list of packages
-    pkgs <- as.data.frame(available.packages(repos = repos)[,"Package"])
+    pkgs <- tibble::tibble(available.packages(repos = repos)[,"Package"])
     names(pkgs) <- "word"
 
     if (length(topics) == 1L) {
