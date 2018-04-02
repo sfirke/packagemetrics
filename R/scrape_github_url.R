@@ -7,6 +7,7 @@
 #'
 #' @return a data.frame with metric info
 #' @export
+#' @importFrom httr http_status GET
 #' @examples
 #'
 #'scrape_github_package_page("dplyr")
@@ -16,7 +17,9 @@
 
 scrape_github_package_page <- function(package_name){
   gh_info <- getGitHub(package_name)
-  if(!gh_info$ongithub){
+  repo_url <- gh_info$github_url
+
+  if(is.na(repo_url) || http_status(GET(repo_url))$category != "Success"){
     return(data.frame(package = package_name,
                       ci = "Not on GitHub",
                       test_coverage = "Not on GitHub",
@@ -27,10 +30,9 @@ scrape_github_package_page <- function(package_name){
                       last_issue_closed = NA,
                       contributors = NA,
                       stringsAsFactors = FALSE
-                      )
-          )
+    )
+    )
   }
-  repo_url <- gh_info$github_url
 
   page_html <- repo_url %>%
     xml2::read_html()
@@ -40,17 +42,17 @@ scrape_github_package_page <- function(package_name){
     purrr::map(xml2::xml_attrs) %>%
     purrr::map_df(~as.list(.))
 
-  if(! "data-canonical-src" %in% names(image_info)){ # if no images, don't try to crawl badges
+  if(! "data-canonical-src" %in% names(image_info)) { # if no images, don't try to crawl badges
     ci <- "NONE"
     codecov <- NA
   } else {
-  travis <- sum(stringr::str_detect(image_info$`data-canonical-src`, "travis-ci"), na.rm = TRUE) >0
-  appveyor <- sum(stringr::str_detect(image_info$`data-canonical-src`, "appveyor"), na.rm = TRUE) > 0
-  codecov <- sum(stringr::str_detect(image_info$`data-canonical-src`, "codecov"), na.rm = TRUE) > 0
-  ci <- dplyr::case_when(!travis & !appveyor ~ "NONE",
-                         travis & appveyor ~ "Travis, Appveyor",
-                         travis ~ "Travis",
-                         appveyor ~ "Appveyor")
+    travis <- sum(stringr::str_detect(image_info$`data-canonical-src`, "travis-ci"), na.rm = TRUE) > 0
+    appveyor <- sum(stringr::str_detect(image_info$`data-canonical-src`, "appveyor"), na.rm = TRUE) > 0
+    codecov <- sum(stringr::str_detect(image_info$`data-canonical-src`, "codecov"), na.rm = TRUE) > 0
+    ci <- dplyr::case_when(!travis & !appveyor ~ "NONE",
+                           travis & appveyor ~ "Travis, Appveyor",
+                           travis ~ "Travis",
+                           appveyor ~ "Appveyor")
   }
 
   data.frame(package = package_name,
@@ -59,9 +61,9 @@ scrape_github_package_page <- function(package_name){
              stringsAsFactors = FALSE
   ) %>%
     dplyr::bind_cols(get_social_stats_from_html(page_html),
-              get_last_commit(page_html),
-              get_last_issue_closed(repo_url),
-              get_num_contributors(page_html))
+                     get_last_commit(page_html),
+                     get_last_issue_closed(repo_url),
+                     get_num_contributors(page_html))
 }
 
 
@@ -86,7 +88,7 @@ get_last_commit <- function(page_html){
     purrr::map_df(~as.list(.))
 
   if(nrow(dateLastCommit) == 0){
-  # dateLastCommit <- dplyr::tibble(last_commit = NA_character_)
+    # dateLastCommit <- dplyr::tibble(last_commit = NA_character_)
     dateLastCommit <- dplyr::tibble(last_commit = NA)
   } else{
     dateLastCommit <- dateLastCommit %>%
@@ -105,8 +107,8 @@ get_last_issue_closed <- function(repo_url){
     rvest::html_text() %>%
     data.frame(last_issue_closed=.) %>%
     dplyr::mutate(last_issue_closed = gsub("\n|updated","",last_issue_closed) %>%
-             trimws %>%
-             as.Date(., format = "%B %d, %Y")) %>%
+                    trimws %>%
+                    as.Date(., format = "%B %d, %Y")) %>%
     dplyr::mutate(last_issue_closed = as.numeric(Sys.Date() - last_issue_closed)/30) %>%
     dplyr::slice(1)
   if(nrow(result) == 0){

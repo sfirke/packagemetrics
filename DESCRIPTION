@@ -28,7 +28,8 @@ Imports:
     tidytext,
     tibble,
     formattable,
-    memoise
+    memoise,
+    httr
 Remotes: lshep/stackr
 License: MIT + file LICENSE
 Encoding: UTF-8
