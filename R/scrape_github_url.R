@@ -18,7 +18,6 @@
 scrape_github_package_page <- function(package_name){
   gh_info <- getGitHub(package_name)
   repo_url <- gh_info$github_url
-
   if(is.na(repo_url) || http_status(GET(repo_url))$category != "Success"){
     return(data.frame(package = package_name,
                       ci = "Not on GitHub",
@@ -28,10 +27,9 @@ scrape_github_package_page <- function(package_name){
                       watchers = NA,
                       last_commit = NA,
                       last_issue_closed = NA,
-                      contributors = NA,
-                      stringsAsFactors = FALSE
-    )
-    )
+                      contributors = NA
+                      )
+          )
   }
 
   page_html <- repo_url %>%
@@ -55,10 +53,9 @@ scrape_github_package_page <- function(package_name){
                            appveyor ~ "Appveyor")
   }
 
-  data.frame(package = package_name,
+  tibble::tibble(package = package_name,
              ci = ci,
-             test_coverage = ifelse(codecov, "CodeCov", "NONE"),
-             stringsAsFactors = FALSE
+             test_coverage = ifelse(codecov, "CodeCov", "NONE")
   ) %>%
     dplyr::bind_cols(get_social_stats_from_html(page_html),
                      get_last_commit(page_html),
@@ -105,7 +102,7 @@ get_last_issue_closed <- function(repo_url){
     xml2::read_html() %>%
     rvest::html_nodes(".opened-by+ .ml-2") %>%
     rvest::html_text() %>%
-    data.frame(last_issue_closed=.) %>%
+    tibble::tibble(last_issue_closed=.) %>%
     dplyr::mutate(last_issue_closed = gsub("\n|updated","",last_issue_closed) %>%
                     trimws %>%
                     as.Date(., format = "%B %d, %Y")) %>%
@@ -125,5 +122,5 @@ get_num_contributors <- function(page_html){
 
   if(length(no_of_contributors) == 0L) no_of_contributors = NA
 
-  data.frame(contributors = no_of_contributors)
+  tibble::tibble(contributors = no_of_contributors)
 }
