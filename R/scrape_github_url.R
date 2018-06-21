@@ -16,12 +16,15 @@
 
 
 scrape_github_package_page <- function(package_name){
-  gh_info <- getGitHub(package_name)
-  repo_url <- gh_info$github_url
-  if(is.na(repo_url) || http_status(GET(repo_url))$category != "Success"){
-    return(data.frame(package = package_name,
-                      ci = "Not on GitHub",
-                      test_coverage = "Not on GitHub",
+  if(in_cran(package_name)) {
+    gh_info <- getGitHub(package_name)
+    repo_url <- gh_info$github_url
+  }
+
+  if(!in_cran(package_name) || is.na(repo_url) || http_status(GET(repo_url))$category != "Success"){
+    return(tibble::tibble(package = package_name,
+                      ci = NA,
+                      test_coverage = NA,
                       forks = NA,
                       stars = NA,
                       watchers = NA,

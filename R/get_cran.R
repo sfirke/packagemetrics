@@ -20,8 +20,6 @@ get_memoise_cran <- memoise::memoise({
   }}
 )
 
-
-
 #' Get CRAN Packages
 #'
 #' Returns a tibble containing the current CRAN pacakges.

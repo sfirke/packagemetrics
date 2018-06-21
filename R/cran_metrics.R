@@ -18,9 +18,12 @@ cran_metrics <- function(package_name, forget = FALSE) {
                    "stringr",   "tibble",    "rvest",     "tidyr",     "xml2",      "tidyverse")
   cran = get_cran(forget)
 
-  if (!(package_name %in% cran$package))
-    stop(sprintf("Package %s not in CRAN. Only supply packages that exists in CRAN",
-         package_name))
+  if (!(package_name %in% cran$package)) {
+    return(tibble::tibble(package = package_name,
+                   published = NA, title = NA, depends_count = NA,suggests_count = NA,
+                   tidyverse_happy = NA, has_vignette_build = NA, has_tests = NA,
+                   reverse_count = NA, dl_last_month = NA))
+  }
 
   cran %>%
   dplyr::filter(package %in% package_name) %>%
