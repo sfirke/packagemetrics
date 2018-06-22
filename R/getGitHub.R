@@ -13,10 +13,7 @@
 
 getGitHub <- function(packages, forget = FALSE){
 
-  inCran(packages, forget)
-  # Don't need forget parameter, since forget =TRUE would have
-  # been triggered in inCran
-  cran_urls <- get_cran() %>%
+  cran_urls <- get_cran(forget = forget) %>%
     dplyr::filter(package %in% packages) %>%
     dplyr::select(package, url, bugreports)
 
@@ -45,10 +42,10 @@ getGitHub <- function(packages, forget = FALSE){
 
 }
 
-inCran <- function(package, forget = FALSE){
+in_cran <- function(package, forget = FALSE){
   cran = get_cran(forget)
   #stopifnot(package %in% cran$package)
-  if(! (package %in% cran$package )) stop("Package ",  package, " not in CRAN.  Only supply packages that exists in CRAN")
+  package %in% cran$package
 }
 
 
