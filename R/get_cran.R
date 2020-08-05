@@ -5,7 +5,7 @@ get_memoise_cran <- memoise::memoise({
     cran <- cran[, -dplyr::first(which(names(cran) == "MD5sum"))]
 
     # make it a tibble
-    cran <- dplyr::tbl_df(cran)
+    cran <- tibble::as_tibble(cran)
 
     if (packageVersion("janitor") > "0.3.1") {
       cran <- cran %>%
@@ -14,7 +14,7 @@ get_memoise_cran <- memoise::memoise({
     } else {
       cran <- cran %>%
         janitor::clean_names() %>%
-        janitor::remove_empty_cols()
+        janitor::remove_empty("cols")
     }
     cran
   }}
