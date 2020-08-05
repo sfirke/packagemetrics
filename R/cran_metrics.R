@@ -13,9 +13,7 @@
 #' cran_metrics("dplyr")
 
 cran_metrics <- function(package_name, forget = FALSE) {
-  tv_packages <- c("broom",     "dplyr",     "forcats",   "ggplot2",   "haven",     "httr",      "hms",
-                   "jsonlite",  "lubridate", "magrittr",  "modelr",    "purrr",     "readr",     "readxl",
-                   "stringr",   "tibble",    "rvest",     "tidyr",     "xml2",      "tidyverse")
+  tv_packages <- tidyverse::tidyverse_packages(include_self = TRUE)
   cran = get_cran(forget)
 
   if (!(package_name %in% cran$package)) {
@@ -32,7 +30,7 @@ cran_metrics <- function(package_name, forget = FALSE) {
          reverse_imports, reverse_depends,
          vignettebuilder, published, title
          ) %>%
-  dplyr::mutate_at(dplyr::vars(depends:reverse_depends), dplyr::funs(count = count_packages)) %>%
+  dplyr::mutate(dplyr::across(depends:reverse_depends, count_packages, .names = "{col}_count")) %>%
   dplyr::mutate(
     tidyverse_happy = ifelse(stringr::str_detect(imports, paste(tv_packages, collapse = "|")), TRUE, FALSE),
     has_vignette_build = ifelse(is.na(vignettebuilder), FALSE, TRUE),

@@ -85,7 +85,9 @@ get_last_commit <- function(page_html){
   dateLastCommit <- page_html %>%
     rvest::html_nodes("relative-time") %>%
     purrr::map(xml2::xml_attrs) %>%
-    purrr::map_df(~as.list(.))
+    purrr::map_df(~as.list(.)) %>%
+    dplyr::slice(1) # as of Aug 2020, first value is most recent commit, second is latest release
+
 
   if(nrow(dateLastCommit) == 0){
     # dateLastCommit <- dplyr::tibble(last_commit = NA_character_)
