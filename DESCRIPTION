@@ -29,12 +29,13 @@ Imports:
     tibble,
     formattable,
     memoise,
-    httr
+    httr,
+    tidyverse
 Remotes: lshep/stackr
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.0.1
+RoxygenNote: 7.1.0
 Suggests: knitr,
     rmarkdown
 VignetteBuilder: knitr
