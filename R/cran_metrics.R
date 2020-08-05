@@ -32,7 +32,7 @@ cran_metrics <- function(package_name, forget = FALSE) {
          reverse_imports, reverse_depends,
          vignettebuilder, published, title
          ) %>%
-  dplyr::mutate(dplyr::across(depends:reverse_depends, count_packages.names = "{col}_count"))) %>%
+  dplyr::mutate(dplyr::across(depends:reverse_depends, count_packages.names = "{col}_count")) %>%
   dplyr::mutate(
     tidyverse_happy = ifelse(stringr::str_detect(imports, paste(tv_packages, collapse = "|")), TRUE, FALSE),
     has_vignette_build = ifelse(is.na(vignettebuilder), FALSE, TRUE),
