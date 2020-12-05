@@ -105,11 +105,11 @@ get_last_commit <- function(page_html){
 get_last_issue_closed <- function(repo_url){
   result <- paste0(repo_url, "/issues?q=is%3Aissue+is%3Aclosed+sort%3Aupdated-desc") %>%
     xml2::read_html() %>%
-    rvest::html_nodes(".opened-by+ .ml-2") %>%
+    rvest::html_nodes(".opened-by") %>%
     rvest::html_text() %>%
     tibble::tibble(last_issue_closed=.) %>%
     dplyr::mutate(last_issue_closed = gsub("\n|updated","",last_issue_closed) %>%
-                    trimws %>%
+                    stringr::str_extract(., "(?<=was closed )(.*)") %>%
                     as.Date(., format = "%B %d, %Y")) %>%
     dplyr::mutate(last_issue_closed = as.numeric(Sys.Date() - last_issue_closed)/30) %>%
     dplyr::slice(1)
@@ -121,8 +121,8 @@ get_last_issue_closed <- function(repo_url){
 
 get_num_contributors <- function(page_html){
   no_of_contributors <- page_html %>%
-    rvest::html_nodes(".numbers-summary a") %>%
-    rvest::html_text() %>% stringr::str_match_all(" [0-9]+") %>% unlist() %>%
+    rvest::html_nodes(".Counter") %>%
+    rvest::html_text() %>%
     dplyr::last() %>% as.numeric()
 
   if(length(no_of_contributors) == 0L) no_of_contributors = NA
