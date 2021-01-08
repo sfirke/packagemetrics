@@ -7,3 +7,7 @@ utils::globalVariables(c("action", "aria-label", "bug_git", "bugreports",
                          "reverse_depends_count", "reverse_imports",
                          "reverse_imports_count", "stars", "suggests",
                          "tidyverse_happy", "url_git", "vignettebuilder"))
+
+.onLoad <- function(libname, pkgname) {
+  get_memoise_cran <<- memoise::memoise(get_memoise_cran)
+}

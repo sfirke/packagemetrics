@@ -1,5 +1,4 @@
-get_memoise_cran <- memoise::memoise({
-  function() {
+get_memoise_cran <- function() {
     cran <- tools::CRAN_package_db()
     # remove first instance of column name MD5Sum
     cran <- cran[, -dplyr::first(which(names(cran) == "MD5sum"))]
@@ -17,8 +16,7 @@ get_memoise_cran <- memoise::memoise({
         janitor::remove_empty("cols")
     }
     cran
-  }}
-)
+}
 
 #' Get CRAN Packages
 #'
