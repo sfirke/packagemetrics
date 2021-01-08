@@ -103,6 +103,7 @@ get_last_commit <- function(page_html){
 }
 
 get_last_issue_closed <- function(repo_url){
+  repo_url <- stringr::str_remove(repo_url, "\\.git$") #issue #54
   result <- paste0(repo_url, "/issues?q=is%3Aissue+is%3Aclosed+sort%3Aupdated-desc") %>%
     xml2::read_html() %>%
     rvest::html_nodes(".opened-by") %>%
