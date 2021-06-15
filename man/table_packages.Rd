@@ -4,7 +4,9 @@
 \name{table_packages}
 \alias{table_packages}
 \title{Table of Packages}
-\format{A character vector of packages}
+\format{
+A character vector of packages
+}
 \usage{
 table_packages
 }

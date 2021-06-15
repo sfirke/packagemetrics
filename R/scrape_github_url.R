@@ -74,7 +74,7 @@ get_social_stats_from_html <- function(page_html){
     purrr::map_df(~as.list(.)) %>%
     dplyr::select(`aria-label`) %>%
     dplyr::mutate(github_social = stringr::str_extract(`aria-label`, "[[:digit:]]+"),
-                  action = c("watchers", "stars", "forks")) %>%
+                  action = c("stars", "forks")) %>%
     dplyr::select(action, github_social) %>%
     dplyr::mutate(github_social = as.numeric(github_social)) %>%
     tidyr::spread(action, github_social)

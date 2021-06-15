@@ -4,8 +4,14 @@
 \alias{get_pkgs}
 \title{Get a list of CRAN packages associated with a topic}
 \usage{
-get_pkgs(topics, tag = "r", pagesize = 100, num_pages = 200,
-  repos = "https://cran.rstudio.com", ...)
+get_pkgs(
+  topics,
+  tag = "r",
+  pagesize = 100,
+  num_pages = 200,
+  repos = "https://cran.rstudio.com",
+  ...
+)
 }
 \arguments{
 \item{topics}{What are you trying to do?}

@@ -3,7 +3,6 @@
 \docType{package}
 \name{packagemetrics}
 \alias{packagemetrics}
-\alias{packagemetrics-package}
 \title{janitor}
 \description{
 packagemetrics gathers information about a package from CRAN, StackOverflow, and GitHub (if applicable).
