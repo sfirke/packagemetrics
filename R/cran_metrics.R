@@ -34,7 +34,7 @@ cran_metrics <- function(package_name, forget = FALSE) {
   dplyr::mutate(
     tidyverse_happy = ifelse(stringr::str_detect(imports, paste(tv_packages, collapse = "|")), TRUE, FALSE),
     has_vignette_build = ifelse(is.na(vignettebuilder), FALSE, TRUE),
-    has_tests = ifelse(stringr::str_detect(suggests, "testthat|RUnit"), TRUE, FALSE),
+    has_tests = ifelse(stringr::str_detect(suggests, "testthat|RUnit|tinytest"), TRUE, FALSE),
     has_tests = ifelse(is.na(has_tests), FALSE, has_tests),
     reverse_count = ifelse(is.na(reverse_imports_count), 0, reverse_imports_count) + ifelse(is.na(reverse_depends_count), 0, reverse_depends_count)
     ) %>%
