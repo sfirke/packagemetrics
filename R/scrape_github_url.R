@@ -67,18 +67,16 @@ scrape_github_package_page <- function(package_name){
 }
 
 
-get_social_stats_from_html <- function(page_html){
-  page_html %>%
-    rvest::html_nodes(".social-count") %>%
-    purrr::map(xml2::xml_attrs) %>%
-    purrr::map_df(~as.list(.)) %>%
-    dplyr::select(`aria-label`) %>%
-    dplyr::mutate(github_social = stringr::str_extract(`aria-label`, "[[:digit:]]+"),
-                  action = c("stars", "forks")) %>%
-    dplyr::select(action, github_social) %>%
-    dplyr::mutate(github_social = as.numeric(github_social)) %>%
-    tidyr::spread(action, github_social)
 
+get_social_stats_from_html <- function(page_html){
+  vals <- page_html %>%
+    rvest::html_nodes("span.text-bold") %>%
+    rvest::html_text()
+  vals <- vals[1:2]
+  tibble::tibble(
+    stars = vals[1],
+    forks = vals[2]
+  )
 }
 
 get_last_commit <- function(page_html){
